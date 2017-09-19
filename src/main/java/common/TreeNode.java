@@ -56,21 +56,30 @@ public class TreeNode {
 	/**
 	 * 广度优先搜索BFS
 	 */
-	private String breadthFirstSearch(TreeNode node, StringBuilder sb){
+	private void breadthFirstSearch(TreeNode node, StringBuilder sb){
+		if(node == null || sb == null) return;
 		Queue<TreeNode> queue = new LinkedList<TreeNode>();
 		queue.offer(node);
-		return null;
+
+		while(!queue.isEmpty()){
+			TreeNode n = queue.poll();
+			if(n == null){
+				continue;
+			}
+			sb.append(n.val + ", ");
+			queue.offer(n.left);
+			queue.offer(n.right);
+		}
 	}
 
 	/**
 	 * 深度优先搜索DFS
 	 */
-	private String depthFirstSearch(TreeNode node, StringBuilder sb){
-		if(node == null || sb == null) return null;
+	private void depthFirstSearch(TreeNode node, StringBuilder sb){
+		if(node == null || sb == null) return;
 		sb.append(node.val + ", ");
 		depthFirstSearch(node.left, sb);
 		depthFirstSearch(node.right, sb);
-		return sb.toString();
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public class CommonBuilder {
 		List<Integer> nums = Arrays.asList(4,6,8,10,12,14,16,18,19,20);
 		TreeNode root = buildBSTTree(nums);
 		System.out.println(root.printDFS());
-//		System.out.println(root.printBFS());
+		System.out.println(root.printBFS());
 		System.out.println(TreeNode.midTraverse(root));
 		System.out.println(TreeNode.preTraverse(root));
 		System.out.println(TreeNode.lastTraverse(root));
