@@ -17,6 +17,7 @@ public class CommonBuilder {
 		System.out.println(root.midTraverse());
 		System.out.println(root.preTraverse());
 		System.out.println(root.lastTraverse());
+		System.out.println(root.getHeight());
 	}
 
 	/**

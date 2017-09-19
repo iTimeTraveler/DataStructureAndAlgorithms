@@ -87,6 +87,18 @@ public class TreeNode<T> {
 		depthFirstSearch(node.right, sb);
 	}
 
+	public int getHeight(){
+		if(left == null && right == null){
+			return 1;
+		}else if(left == null) {
+			return 1 + right.getHeight();
+		}else if(right == null) {
+			return 1 + left.getHeight();
+		}else{
+			return 1 + Math.max(left.getHeight(), right.getHeight());
+		}
+	}
+	
 	@Override
 	public String toString() {
 		return "TreeNode{" +
