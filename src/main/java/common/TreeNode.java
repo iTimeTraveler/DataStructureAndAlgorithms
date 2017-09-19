@@ -1,43 +1,48 @@
-package common;
+package main.java.common;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class TreeNode {
-	public int val;
-	public TreeNode left;
-	public TreeNode right;
-	public TreeNode(int x){
+public class TreeNode<T> {
+	public T val;
+	public boolean isRed;
+	public TreeNode<T> left;
+	public TreeNode<T> right;
+	public TreeNode<T> parent;
+	public TreeNode(T x){
 		val = x;
 	}
 
 	/**
 	 * 中序遍历
 	 */
-	public static String midTraverse(TreeNode root){
-		if(root == null) return "";
+	public String midTraverse(){
 		StringBuilder sb = new StringBuilder();
-		sb.append(midTraverse(root.left) + String.valueOf(root.val) +", "+  midTraverse(root.right));
+		sb.append((left != null ? left.midTraverse() : "")
+				+ String.valueOf(val) + ", " 
+				+ (right != null ? right.midTraverse() : ""));
 		return sb.toString();
 	}
 
 	/**
 	 * 先序遍历
 	 */
-	public static String preTraverse(TreeNode root){
-		if(root == null) return "";
+	public String preTraverse(){
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.valueOf(root.val) +", " + midTraverse(root.left) +  midTraverse(root.right));
+		sb.append(String.valueOf(val) + ", " 
+				+ (left != null ? left.midTraverse() : "")
+				+ (right != null ? right.midTraverse() : ""));
 		return sb.toString();
 	}
 
 	/**
 	 * 后序遍历
 	 */
-	public static String lastTraverse(TreeNode root){
-		if(root == null) return "";
+	public String lastTraverse(){
 		StringBuilder sb = new StringBuilder();
-		sb.append(midTraverse(root.left) + ", " + midTraverse(root.right) + String.valueOf(root.val));
+		sb.append((left != null ? left.midTraverse() : "")  + ", " 
+				+ (right != null ? right.midTraverse() : "")
+				+ String.valueOf(val));
 		return sb.toString();
 	}
 
@@ -56,13 +61,13 @@ public class TreeNode {
 	/**
 	 * 广度优先搜索BFS
 	 */
-	private void breadthFirstSearch(TreeNode node, StringBuilder sb){
+	private void breadthFirstSearch(TreeNode<T> node, StringBuilder sb){
 		if(node == null || sb == null) return;
-		Queue<TreeNode> queue = new LinkedList<TreeNode>();
+		Queue<TreeNode<T>> queue = new LinkedList<TreeNode<T>>();
 		queue.offer(node);
 
 		while(!queue.isEmpty()){
-			TreeNode n = queue.poll();
+			TreeNode<T> n = queue.poll();
 			if(n == null){
 				continue;
 			}
@@ -75,7 +80,7 @@ public class TreeNode {
 	/**
 	 * 深度优先搜索DFS
 	 */
-	private void depthFirstSearch(TreeNode node, StringBuilder sb){
+	private void depthFirstSearch(TreeNode<T> node, StringBuilder sb){
 		if(node == null || sb == null) return;
 		sb.append(node.val + ", ");
 		depthFirstSearch(node.left, sb);
