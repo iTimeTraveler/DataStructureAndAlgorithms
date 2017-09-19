@@ -1,8 +1,4 @@
-package com.example;
-
-/**
- * Created by xuewenlong on 2017/8/1.
- */
+package common;
 
 public class ListNode {
     int val;
