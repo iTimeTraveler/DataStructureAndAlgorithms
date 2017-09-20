@@ -1,4 +1,4 @@
-package main.java.common;
+package common;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -11,39 +11,6 @@ public class TreeNode<T> {
 	public TreeNode<T> parent;
 	public TreeNode(T x){
 		val = x;
-	}
-
-	/**
-	 * 中序遍历
-	 */
-	public String midTraverse(){
-		StringBuilder sb = new StringBuilder();
-		sb.append((left != null ? left.midTraverse() : "")
-				+ String.valueOf(val) + ", " 
-				+ (right != null ? right.midTraverse() : ""));
-		return sb.toString();
-	}
-
-	/**
-	 * 先序遍历
-	 */
-	public String preTraverse(){
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.valueOf(val) + ", " 
-				+ (left != null ? left.midTraverse() : "")
-				+ (right != null ? right.midTraverse() : ""));
-		return sb.toString();
-	}
-
-	/**
-	 * 后序遍历
-	 */
-	public String lastTraverse(){
-		StringBuilder sb = new StringBuilder();
-		sb.append((left != null ? left.midTraverse() : "")  + ", " 
-				+ (right != null ? right.midTraverse() : "")
-				+ String.valueOf(val));
-		return sb.toString();
 	}
 
 	public String printBFS(){
@@ -87,18 +54,24 @@ public class TreeNode<T> {
 		depthFirstSearch(node.right, sb);
 	}
 
-	public int getHeight(){
-		if(left == null && right == null){
-			return 1;
-		}else if(left == null) {
-			return 1 + right.getHeight();
-		}else if(right == null) {
-			return 1 + left.getHeight();
-		}else{
-			return 1 + Math.max(left.getHeight(), right.getHeight());
+	/**
+	 * 所有元素最大字符数
+	 * @return
+	 */
+	public int getMaxWordWidth(){
+		int vw = 0, lw = 0, rw = 0;
+		if(val != null){
+			vw = val.toString().length();
 		}
+		if(left != null){
+			lw = left.getMaxWordWidth();
+		}
+		if(right != null){
+			rw = right.getMaxWordWidth();
+		}
+		return Math.max(vw, Math.max(lw, rw));
 	}
-	
+
 	@Override
 	public String toString() {
 		return "TreeNode{" +

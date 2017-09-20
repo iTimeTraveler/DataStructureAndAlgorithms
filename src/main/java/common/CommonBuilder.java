@@ -1,4 +1,4 @@
-package main.java.common;
+package common;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,14 +10,17 @@ import java.util.List;
 
 public class CommonBuilder {
 	public static void main(String[] args) {
-		List<Integer> nums = Arrays.asList(4,6,8,10,12,14,16,18,19,20);
-		TreeNode<Integer> root = buildBSTTree(nums);
-		System.out.println(root.printDFS());
-		System.out.println(root.printBFS());
-		System.out.println(root.midTraverse());
-		System.out.println(root.preTraverse());
-		System.out.println(root.lastTraverse());
-		System.out.println(root.getHeight());
+		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9,10,12,13,14,16,18,19,20,36);
+//		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9);
+		Tree<Integer> tree = buildBSTTree(nums);
+		System.out.println(tree.root.printDFS());
+		System.out.println(tree.root.printBFS());
+		System.out.println(Tree.maxHeight(tree.root));
+		System.out.println(Tree.midTraverse(tree.root));
+		System.out.println(Tree.preTraverse(tree.root));
+		System.out.println(Tree.lastTraverse(tree.root));
+		TreePrinter.printTree(tree.root);
+		tree.print();
 	}
 
 	/**
@@ -25,12 +28,12 @@ public class CommonBuilder {
 	 * @param nums
 	 * @return root
 	 */
-	public static TreeNode<Integer> buildBSTTree(List<Integer> nums){
+	public static Tree<Integer> buildBSTTree(List<Integer> nums){
 		if(nums == null || nums.size() <= 0){
 			return null;
 		}
 		Collections.sort(nums);
-		return constructBSTTree(nums, 0, nums.size()-1);
+		return new Tree<Integer>(constructBSTTree(nums, 0, nums.size()-1));
 	}
 
 	private static TreeNode<Integer> constructBSTTree(List<Integer> nums, int start, int end){

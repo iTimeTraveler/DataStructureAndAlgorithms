@@ -1,10 +1,13 @@
-package main.java;
+import common.Tree;
+import common.TreeNode;
 
-import main.java.common.TreeNode;
-
-public class AVLTree<T extends Comparable<T>> {
+public class AVLTree<T extends Comparable<T>> extends Tree{
 	public TreeNode<T> root;
-	
+
+	public AVLTree(TreeNode root) {
+		super(root);
+	}
+
 	/**
 	 * 插入元素
 	 * @param e
@@ -32,7 +35,7 @@ public class AVLTree<T extends Comparable<T>> {
 						success = true;
 					}
 				}else{
-					System.out.println("Insert failed, Node:["+ e.toString() +"] has been exist.");
+					System.out.println("Insert failed, Node:["+ e.toString() +"] has been existed.");
 				}
 			}
 		}
@@ -51,10 +54,5 @@ public class AVLTree<T extends Comparable<T>> {
 	 */
 	public TreeNode<T> search(T e){
 		return null;
-	}
-	
-	public int getHeight(){
-		if(root == null) return 0;
-		return root.getHeight();
 	}
 }
