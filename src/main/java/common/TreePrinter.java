@@ -114,7 +114,7 @@ public class TreePrinter {
 
 
 	/**
-	 * ???ν????
+	 * 树形打印输出
 	 */
 	public static <T extends Comparable<?>> void printTree(TreeNode<T> root){
 		int maxLevel = Tree.maxHeight(root);
