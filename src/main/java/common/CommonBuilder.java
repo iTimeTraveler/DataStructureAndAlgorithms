@@ -12,8 +12,8 @@ import main.java.AVLTree;
 
 public class CommonBuilder {
 	public static void main(String[] args) {
-//		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9,10,12,13,14,16,18,19,20,36);
-		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9);
+		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9,10,12,13,14,16,18,19,20,36);
+//		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9);
 //		Tree<Integer> tree = buildBSTTree(nums);
 //		System.out.println(tree.root.printDFS());
 //		System.out.println(tree.root.printBFS());
@@ -35,6 +35,7 @@ public class CommonBuilder {
 		System.out.println(Tree.preTraverse(avlTree.root));
 		System.out.println(Tree.lastTraverse(avlTree.root));
 		TreePrinter.printTree(avlTree.root);
+		TreePrinter.printTree(avlTree.search(19));
 //		avlTree.print();
 	}
 

@@ -51,17 +51,32 @@ public class AVLTree<T extends Comparable<T>> extends Tree{
 		return root;
 	}
 	
+	//LL型平衡旋转
 	private TreeNode<T> leftLeftRotate(TreeNode<T> root) {
-		return null;
+		TreeNode<T> l = root.left;
+		root.left = l.right;
+		l.right = root;
+		return l;
 	}
+	
+	//LR型平衡旋转
 	private TreeNode<T> leftRightRotate(TreeNode<T> root) {
-		return null;
+		root.left = rightRightRotate(root.left);
+		return leftLeftRotate(root);
 	}
+	
+	//RR型平衡旋转
 	private TreeNode<T> rightRightRotate(TreeNode<T> root) {
-		return null;
+		TreeNode<T> r = root.right;
+		root.right = r.left;
+		r.left = root;
+		return r;
 	}
+
+	//RL型平衡旋转
 	private TreeNode<T> rightLeftRotate(TreeNode<T> root) {
-		return null;
+		root.right = leftLeftRotate(root.right);
+		return rightRightRotate(root);
 	}
 
 	/**
@@ -75,7 +90,20 @@ public class AVLTree<T extends Comparable<T>> extends Tree{
 	 * 查找元素
 	 * @param e
 	 */
-	public TreeNode<T> search(T e){
+	public TreeNode<T> search(T key){
+		if(root == null) return null;
+		
+		TreeNode<T> node = root;
+		while(node != null){
+			int compare = key.compareTo(node.val);
+			if(compare < 0){
+				node = node.left;
+			}else if(compare > 0){
+				node = node.right;
+			}else{
+				return node;
+			}
+		}
 		return null;
 	}
 }
