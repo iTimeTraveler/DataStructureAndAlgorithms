@@ -1,11 +1,11 @@
-package common;
+package main.java.common;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class Tree<T extends Comparable<?>>{
 	public TreeNode<T> root;
-
+	
 	public Tree(TreeNode<T> root){
 		this.root = root;
 	}

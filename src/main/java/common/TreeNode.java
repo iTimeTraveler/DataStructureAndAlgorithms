@@ -1,9 +1,9 @@
-package common;
+package main.java.common;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class TreeNode<T> {
+public class TreeNode<T extends Comparable<?>> {
 	public T val;
 	public boolean isRed;
 	public TreeNode<T> left;

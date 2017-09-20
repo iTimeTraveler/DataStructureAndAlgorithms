@@ -1,46 +1,69 @@
-import common.Tree;
-import common.TreeNode;
+package main.java;
+
+import main.java.common.Tree;
+import main.java.common.TreeNode;
 
 public class AVLTree<T extends Comparable<T>> extends Tree{
-	public TreeNode<T> root;
 
-	public AVLTree(TreeNode root) {
+	public AVLTree(TreeNode<T> root) {
 		super(root);
 	}
-
+	
 	/**
 	 * 插入元素
 	 * @param e
 	 */
 	public void insert(T e){
+		root = insertInternal(root, e);
+	}
+	
+	private TreeNode<T> insertInternal(TreeNode<T> root, T e){
 		if(root == null){
 			root = new TreeNode<T>(e);
 		}else{
-			boolean success = false;
-			TreeNode<T> parent = root;
-			while(!success){
-				int compare = e.compareTo(parent.val);
-				if(compare < 0){
-					if(parent.left != null){
-						parent = parent.left;
+			int compare = e.compareTo(root.val);
+			if(compare < 0){
+				root.left = insertInternal(root.left, e);
+				if(Tree.maxHeight(root.left) - Tree.maxHeight(root.right) == 2){
+					if(e.compareTo(root.left.val) < 0){
+						//LL型
+						root = leftLeftRotate(root);
 					}else{
-						parent.left = new TreeNode<T>(e);
-						success = true;
+						//LR型
+						root = leftRightRotate(root);
 					}
-				}else if(compare > 0){
-					if(parent.right != null){
-						parent = parent.right;
-					}else{
-						parent.right = new TreeNode<T>(e);
-						success = true;
-					}
-				}else{
-					System.out.println("Insert failed, Node:["+ e.toString() +"] has been existed.");
 				}
+			}else if(compare > 0){
+				root.right = insertInternal(root.right, e);
+				if(Tree.maxHeight(root.right) - Tree.maxHeight(root.left) == 2){
+					if(e.compareTo(root.right.val) > 0){
+						//RR型
+						root = rightRightRotate(root);
+					}else{
+						//RL型
+						root = rightLeftRotate(root);
+					}
+				}
+			}else{
+				System.out.println("Insert failed, Node:["+ e.toString() +"] has been existed.");
 			}
 		}
+		return root;
 	}
 	
+	private TreeNode<T> leftLeftRotate(TreeNode<T> root) {
+		return null;
+	}
+	private TreeNode<T> leftRightRotate(TreeNode<T> root) {
+		return null;
+	}
+	private TreeNode<T> rightRightRotate(TreeNode<T> root) {
+		return null;
+	}
+	private TreeNode<T> rightLeftRotate(TreeNode<T> root) {
+		return null;
+	}
+
 	/**
 	 * 删除元素
 	 * @param e
