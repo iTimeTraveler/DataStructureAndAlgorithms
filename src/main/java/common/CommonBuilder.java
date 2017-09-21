@@ -1,18 +1,14 @@
-package main.java.common;
+package common;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import main.java.AVLTree;
-
-/**
- * Created by xuewenlong on 2017/9/19.
- */
 
 public class CommonBuilder {
 	public static void main(String[] args) {
 		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9,10,12,13,14,16,18,19,20,36);
+//		List<Integer> nums = Arrays.asList(1,5,4,9,6,88, 2, 3);
 //		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9);
 //		Tree<Integer> tree = buildBSTTree(nums);
 //		System.out.println(tree.root.printDFS());
@@ -23,7 +19,7 @@ public class CommonBuilder {
 //		System.out.println(Tree.lastTraverse(tree.root));
 //		TreePrinter.printTree(tree.root);
 //		tree.print();
-		
+
 		AVLTree<Integer> avlTree = new AVLTree<Integer>(null);
 		for(int i=0; i<nums.size(); i++) {
 			avlTree.insert(nums.get(i));
@@ -36,7 +32,10 @@ public class CommonBuilder {
 		System.out.println(Tree.lastTraverse(avlTree.root));
 		TreePrinter.printTree(avlTree.root);
 		TreePrinter.printTree(avlTree.search(19));
-//		avlTree.print();
+		avlTree.print();
+
+		avlTree.delete(19);
+		TreePrinter.printTree(avlTree.root);
 	}
 
 	/**

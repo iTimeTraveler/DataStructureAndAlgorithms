@@ -1,12 +1,12 @@
-package main.java.common;
+package common;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Tree<T extends Comparable<?>>{
-	public TreeNode<T> root;
+public class Tree<E extends Comparable<?>>{
+	public TreeNode<E> root;
 	
-	public Tree(TreeNode<T> root){
+	public Tree(TreeNode<E> root){
 		this.root = root;
 	}
 
@@ -60,7 +60,7 @@ public class Tree<T extends Comparable<?>>{
 		int height = Tree.maxHeight(root);
 		int wordWidth = root.getMaxWordWidth();
 		String black = fillBlack("", wordWidth);
-		Queue<TreeNode<T>> queue = new LinkedList<TreeNode<T>>();
+		Queue<TreeNode<E>> queue = new LinkedList<TreeNode<E>>();
 		queue.offer(root);
 
 		//计算最顶层间隔
@@ -80,7 +80,7 @@ public class Tree<T extends Comparable<?>>{
 				System.out.print("\n" + gap.substring(gap.length()/2));
 			}
 
-			TreeNode<T> n = queue.poll();
+			TreeNode<E> n = queue.poll();
 			if(n == null){		//空节点占位符
 				System.out.print(black + gap);
 				nums++;
