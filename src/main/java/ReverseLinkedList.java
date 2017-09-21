@@ -1,34 +1,23 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import common.CommonBuilder;
 import common.ListNode;
 
 public class ReverseLinkedList {
 
 	public static void main(String[] args) {
-		ListNode<Integer> a1 = new ListNode<Integer>(5);
-		ListNode<Integer> a2 = new ListNode<Integer>(4);
-		ListNode<Integer> a3 = new ListNode<Integer>(30);
-		ListNode<Integer> a4 = new ListNode<Integer>(78);
-		ListNode<Integer> a5 = new ListNode<Integer>(99);
-		a1.next = a2;
-		a2.next = a3;
-		a3.next = a4;
-		a4.next = a5;
+		int[] array = {1,2,3,4,5,6};
+		ListNode<Integer> a1 = CommonBuilder.buildLindedList(array);
 
 		//反转单链表
 		ListNode node;
-//		node = reverseList(a1);
+		node = reverseList(a1);
 //		node = reverseList1(a1);
 //		node = reverseList2(a1);
-		node = reversePairedList(a1);
+//		node = reversePairedList(a1);
 
-		//打印输出结果
-		while (node != null){
-			System.out.print(node.val);
-			node = node.next;
-			System.out.print(node != null ? "->" : "");
-		}
+		ListNode.printAllNodes(node);
 	}
 
 

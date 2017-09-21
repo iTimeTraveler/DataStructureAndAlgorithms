@@ -63,4 +63,19 @@ public class CommonBuilder {
 		root.right = constructBSTTree(nums, mid+1, end);
 		return root;
 	}
+
+	/**
+	 * 数组转换为链表
+	 * @param arr
+	 * @return head
+	 */
+	public static ListNode<Integer> buildLindedList(int[] arr) {
+		ListNode<Integer> head = new ListNode<Integer>(arr[0], null);
+		ListNode<Integer> p = head;
+		for (int i = 1; i < arr.length; i++) {
+			p.next = new ListNode<Integer>(arr[i],null);
+			p = p.next;
+		}
+		return head;
+	}
 }
