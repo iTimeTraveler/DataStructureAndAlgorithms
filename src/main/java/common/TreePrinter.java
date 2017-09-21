@@ -1,4 +1,4 @@
-package common;
+package main.java.common;
 
 
 import java.util.ArrayList;
@@ -10,17 +10,15 @@ public class TreePrinter {
 
 	/**
 	 * Print a tree like this.
-	 *         2
-	 *        / \
-	 *       /   \
-	 *      /     \
-	 *     /       \
-	 *     7       5
-	 *    / \     / \
-	 *   /   \   /   \
-	 *   2   6   3   6
-	 *  / \ / \ / \ / \
-	 *  5 8 4 5 8 4 5 8
+	 * 
+	 *                                           2952:0
+	 *                     ┌───────────────────────┴───────────────────────┐
+	 *                  1249:-1                                         5866:0
+	 *         ┌───────────┴───────────┐                       ┌───────────┴───────────┐
+	 *      491:-1                  1572:0                  4786:1                  6190:0
+	 *   ┌─────┘                                               └─────┐           ┌─────┴─────┐
+	 * 339:0                                                      5717:0      6061:0      6271:0
+	 * 
 	 */
 	public static <T extends Comparable<?>> void print(TreeNode<T> root){
 		List<List<String>> lines = new ArrayList<List<String>>();
@@ -128,14 +126,19 @@ public class TreePrinter {
 
 	/**
 	 * 树形打印输出
+	 * 
+	 *         2
+	 *        / \
+	 *       /   \
+	 *      /     \
+	 *     /       \
+	 *     7       5
+	 *    / \     / \
+	 *   /   \   /   \
+	 *   2   6   3   6
+	 *  / \ / \ / \ / \
+	 *  5 8 4 5 8 4 5 8
 	 *
-	 *                                           2952:0
-	 *                     ┌───────────────────────┴───────────────────────┐
-	 *                  1249:-1                                         5866:0
-	 *         ┌───────────┴───────────┐                       ┌───────────┴───────────┐
-	 *      491:-1                  1572:0                  4786:1                  6190:0
-	 *   ┌─────┘                                               └─────┐           ┌─────┴─────┐
-	 * 339:0                                                      5717:0      6061:0      6271:0
 	 */
 	public static <T extends Comparable<?>> void printTree(TreeNode<T> root){
 		int maxLevel = Tree.maxHeight(root);
@@ -215,9 +218,9 @@ public class TreePrinter {
 	 * @param root
 	 *
 	 * d(B)
-	 * b(B d LE) g(R d RI)
-	 * a(R b LE) e(B g LE) h(B g RI)
-	 * f(R e RI)
+	 * b(B d left) g(R d right)
+	 * a(R b left) e(B g left) h(B g right)
+	 * f(R e right)
 	 */
 	public static <T extends Comparable<?>> void printRBDetails(TreeNode<T> root){
 		LinkedList<TreeNode<T>> queue =new LinkedList<TreeNode<T>>();
@@ -234,7 +237,7 @@ public class TreePrinter {
 
 			if(n != null){
 				String pos = n.parent == null ? "" : ( n == n.parent.left
-						? " LE" : " RI");
+						? " left" : " right");
 				String pstr = n.parent == null ? "" : n.parent.val+"";
 				String cstr = n.isRed? "R" : "B";
 				cstr = n.parent == null ? cstr : cstr + " ";
