@@ -1,13 +1,26 @@
 package common;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class TreePrinter {
 
 	/**
-	 * Print a tree
+	 * Print a tree like this.
+	 *         2
+	 *        / \
+	 *       /   \
+	 *      /     \
+	 *     /       \
+	 *     7       5
+	 *    / \     / \
+	 *   /   \   /   \
+	 *   2   6   3   6
+	 *  / \ / \ / \ / \
+	 *  5 8 4 5 8 4 5 8
 	 */
 	public static <T extends Comparable<?>> void print(TreeNode<T> root){
 		List<List<String>> lines = new ArrayList<List<String>>();
@@ -115,6 +128,14 @@ public class TreePrinter {
 
 	/**
 	 * 树形打印输出
+	 *
+	 *                                           2952:0
+	 *                     ┌───────────────────────┴───────────────────────┐
+	 *                  1249:-1                                         5866:0
+	 *         ┌───────────┴───────────┐                       ┌───────────┴───────────┐
+	 *      491:-1                  1572:0                  4786:1                  6190:0
+	 *   ┌─────┘                                               └─────┐           ┌─────┴─────┐
+	 * 339:0                                                      5717:0      6061:0      6271:0
 	 */
 	public static <T extends Comparable<?>> void printTree(TreeNode<T> root){
 		int maxLevel = Tree.maxHeight(root);
@@ -187,4 +208,47 @@ public class TreePrinter {
 		return true;
 	}
 
+
+	/**
+	 * it used print the given node and its children nodes,
+	 * every layer output in one line
+	 * @param root
+	 *
+	 * d(B)
+	 * b(B d LE) g(R d RI)
+	 * a(R b LE) e(B g LE) h(B g RI)
+	 * f(R e RI)
+	 */
+	public static <T extends Comparable<?>> void printRBDetails(TreeNode<T> root){
+		LinkedList<TreeNode<T>> queue =new LinkedList<TreeNode<T>>();
+		LinkedList<TreeNode<T>> queue2 =new LinkedList<TreeNode<T>>();
+		if(root == null){
+			return ;
+		}
+		queue.add(root);
+		boolean firstQueue = true;
+
+		while(!queue.isEmpty() || !queue2.isEmpty()){
+			LinkedList<TreeNode<T>> q = firstQueue ? queue : queue2;
+			TreeNode<T> n = q.poll();
+
+			if(n != null){
+				String pos = n.parent == null ? "" : ( n == n.parent.left
+						? " LE" : " RI");
+				String pstr = n.parent == null ? "" : n.parent.val+"";
+				String cstr = n.isRed? "R" : "B";
+				cstr = n.parent == null ? cstr : cstr + " ";
+				System.out.print(n.val + "("+ (cstr) + pstr + (pos) + ")\t");
+				if(n.left != null){
+					(firstQueue ? queue2 : queue).add(n.left);
+				}
+				if(n.right != null){
+					(firstQueue ? queue2 : queue).add(n.right);
+				}
+			}else{
+				System.out.println();
+				firstQueue = !firstQueue;
+			}
+		}
+	}
 }
