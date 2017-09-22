@@ -28,6 +28,7 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 			TreeNode<E> node = root;
 			while(true){
 				if(node == null) break;
+				
 				int compare = e.compareTo(node.val);
 				if(compare < 0){
 					if(node.left != null){
@@ -36,7 +37,9 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 						TreeNode<E> tmp = new TreeNode<E>(e);
 						tmp.isRed = true;		//new node color is red.
 						tmp.parent = node;
+						
 						node.left = tmp;
+						node = node.left;
 						break;
 					}
 				}else if(compare > 0){
@@ -46,7 +49,9 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 						TreeNode<E> tmp = new TreeNode<E>(e);
 						tmp.isRed = true;		//new node color is red.
 						tmp.parent = node;
+						
 						node.right = tmp;
+						node = node.right;
 						break;
 					}
 				}else{
@@ -62,7 +67,7 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	/**
 	 * 只有在父节点为红色节点的时候是需要插入修复操作，分为以下的三种情况
 	 * 
-	 * 1. 叔叔节点也为红色。
+	 * 1. 叔叔节点也为红色。（将父节点和叔叔节点与祖父节点的颜色互换）
 	 * 2. 叔叔节点为空，且祖父节点、父节点和新节点处于一条斜线上。（将B父节点进行旋转操作，并且和祖父节点A互换颜色）
 	 * 3. 叔叔节点为空，且祖父节点、父节点和新节点不处于一条斜线上。（将C当前节点进行旋转，然后就成了上面这个case 2）
 	 * @param e
@@ -84,22 +89,19 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 						grandfather = leftLeftRotate(grandfather);
 						grandfather.isRed = false;
 						grandfather.right.isRed = true;
-						parent = null;
 					}else{
 						//LR型: 3. 叔叔节点为空，且祖父节点、父节点和新节点不处于一条斜线上
 						grandfather = leftRightRotate(grandfather);
 						grandfather.isRed = true;
 						grandfather.right.isRed = false;
 					}
-					
-				}else {
+				}else{
 					boolean isRight = (e == parent.right);
 					if(isRight){
 						//RR型: 2. 叔叔节点为空，且祖父节点、父节点和新节点在一条斜线上
 						grandfather = rightRightRotate(grandfather);
 						grandfather.isRed = false;
 						grandfather.left.isRed = true;
-						parent = null;
 					}else{
 						//RL型: 3. 叔叔节点为空，且祖父节点、父节点和新节点不处于一条斜线上
 						grandfather = rightLeftRotate(grandfather);
@@ -107,10 +109,8 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 						grandfather.left.isRed = false;
 					}
 				}
-				e = grandfather;
-				parent = e.parent;
-				parent = null;
-			}else{	//1. 叔叔节点也为红色：将父节点和叔叔节点与祖父节点的颜色互换
+				break;
+			}else{	//1. 叔叔节点也为红色
 				parent.isRed = false;
 				uncle.isRed = false;
 				grandfather.isRed = true;
@@ -142,6 +142,9 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	//LL型平衡旋转
 		private TreeNode<E> leftLeftRotate(TreeNode<E> root) {
 			TreeNode<E> l = root.left;
+			if(this.root == root){
+				this.root = l;
+			}
 			root.left = l.right;
 			l.right = root;
 			return l;
@@ -156,6 +159,9 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 		//RR型平衡旋转
 		private TreeNode<E> rightRightRotate(TreeNode<E> root) {
 			TreeNode<E> r = root.right;
+			if(this.root == root){
+				this.root = r;
+			}
 			root.right = r.left;
 			r.left = root;
 			return r;

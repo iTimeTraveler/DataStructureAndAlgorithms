@@ -8,7 +8,7 @@ import java.util.List;
 public class CommonBuilder {
 	public static void main(String[] args) {
 //		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9,10,12,13,14,16,18,19,20,36);
-		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9);
+		List<Integer> nums = Arrays.asList(1,2,3,4,5,6,7,8,9);
 //		Tree<Integer> tree = buildBSTTree(nums);
 //		System.out.println(tree.root.printDFS());
 //		System.out.println(tree.root.printBFS());
