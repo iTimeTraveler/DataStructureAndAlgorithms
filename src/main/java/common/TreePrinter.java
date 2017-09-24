@@ -253,5 +253,6 @@ public class TreePrinter {
 				firstQueue = !firstQueue;
 			}
 		}
+		System.out.println();
 	}
 }

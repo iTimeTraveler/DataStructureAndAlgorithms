@@ -8,7 +8,7 @@ import java.util.List;
 public class CommonBuilder {
 	public static void main(String[] args) {
 //		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9,10,12,13,14,16,18,19,20,36);
-		List<Integer> nums = Arrays.asList(1,2,3,4,5,6,7,8,9);
+		List<Integer> nums = Arrays.asList(6,2,9,4,5,7,3,8,1);
 //		Tree<Integer> tree = buildBSTTree(nums);
 //		System.out.println(tree.root.printDFS());
 //		System.out.println(tree.root.printBFS());
@@ -30,9 +30,9 @@ public class CommonBuilder {
 //		System.out.println(Tree.preTraverse(avlTree.root));
 //		System.out.println(Tree.lastTraverse(avlTree.root));
 //		TreePrinter.printTree(avlTree.root);
-//		TreePrinter.printTree(avlTree.search(19));
+//		TreePrinter.printTree(avlTree.search(4));
 //
-//		avlTree.delete(19);
+//		avlTree.delete(4);
 //		TreePrinter.printRBDetails(avlTree.root);
 		
 		RBTree<Integer> rbTree = new RBTree<Integer>(null);

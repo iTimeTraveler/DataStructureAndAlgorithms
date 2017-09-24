@@ -1,4 +1,4 @@
-package common;
+package main.java.common;
 
 
 public class AVLTree<E extends Comparable<E>> extends Tree<E>{
@@ -12,16 +12,24 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 	 * @param e
 	 */
 	public void insert(E e){
-		root = insertInternal(root, e);
+		root = insertRecursion(root, e);
 	}
 	
-	private TreeNode<E> insertInternal(TreeNode<E> root, E e){
+	/**
+	 * 递归执行元素插入
+	 * @param root
+	 * @param e
+	 * @return
+	 */
+	private TreeNode<E> insertRecursion(TreeNode<E> root, E e){
 		if(root == null){
 			root = new TreeNode<E>(e);
 		}else{
 			int compare = e.compareTo(root.val);
 			if(compare < 0){
-				root.left = insertInternal(root.left, e);
+				TreeNode<E> node = insertRecursion(root.left, e);
+				node.parent = root;
+				root.left = node;
 				if(Tree.maxHeight(root.left) - Tree.maxHeight(root.right) == 2){
 					if(e.compareTo(root.left.val) < 0){
 						//LL型
@@ -32,7 +40,9 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 					}
 				}
 			}else if(compare > 0){
-				root.right = insertInternal(root.right, e);
+				TreeNode<E> node = insertRecursion(root.right, e);
+				node.parent = root;
+				root.right = node;
 				if(Tree.maxHeight(root.right) - Tree.maxHeight(root.left) == 2){
 					if(e.compareTo(root.right.val) > 0){
 						//RR型
@@ -54,35 +64,36 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 	 * @param e
 	 */
 	public void delete(E e){
-		root = deleteInternal(root, e);
+		root = deleteRecursion(root, e);
 	}
 
-	private TreeNode<E> deleteInternal(TreeNode<E> root, E e){
+	private TreeNode<E> deleteRecursion(TreeNode<E> root, E e){
 		if(root == null) return null;
 
 		//递归找到要删除的元素
 		int compare = e.compareTo(root.val);
 		if(compare < 0){
-			root.left = deleteInternal(root.left, e);
+			root.left = deleteRecursion(root.left, e);
 		}else if(compare > 0){
-			root.right = deleteInternal(root.right, e);
+			root.right = deleteRecursion(root.right, e);
 		}else{
 			// 删除当前元素
 			// 找到左子树最大值填充到当前位置，并删除左子树中的那个最大值
+			// （此过程不会变动节点指针，所以不必考虑节点的parent）
 			if(root.left != null){
 				TreeNode<E> l = root.left;
 				while(l.right != null){
 					l = l.right;
 				}
 				root.val = l.val;
-				root.left = deleteInternal(root.left, root.val);
+				root.left = deleteRecursion(root.left, root.val);
 			}else if(root.right != null){	// 或者找到右子树最大值填充到当前位置，并删除右子树中的那个最大值
 				TreeNode<E> r = root.right;
 				while(r.left != null){
 					r = r.left;
 				}
 				root.val = r.val;
-				root.right = deleteInternal(root.right, root.val);
+				root.right = deleteRecursion(root.right, root.val);
 			}else{
 				root = null;
 			}
@@ -134,9 +145,16 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 
 	//LL型平衡旋转
 	private TreeNode<E> leftLeftRotate(TreeNode<E> root) {
-		TreeNode<E> l = root.left;
+		TreeNode<E> l = root.left;		//new root is l.
+		l.parent = root.parent;
+		
 		root.left = l.right;
+		if(l.right != null){
+			l.right.parent = root;
+		}
+		
 		l.right = root;
+		root.parent = l;
 		return l;
 	}
 
@@ -148,9 +166,16 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 
 	//RR型平衡旋转
 	private TreeNode<E> rightRightRotate(TreeNode<E> root) {
-		TreeNode<E> r = root.right;
+		TreeNode<E> r = root.right;		//new root is r.
+		r.parent = root.parent;
+		
 		root.right = r.left;
+		if(r.left != null){
+			r.left.parent = root;
+		}
+		
 		r.left = root;
+		root.parent = r;
 		return r;
 	}
 

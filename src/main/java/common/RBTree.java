@@ -140,36 +140,36 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	}
 	
 	//LL型平衡旋转
-		private TreeNode<E> leftLeftRotate(TreeNode<E> root) {
-			TreeNode<E> l = root.left;
-			if(this.root == root){
-				this.root = l;
-			}
-			root.left = l.right;
-			l.right = root;
-			return l;
+	private TreeNode<E> leftLeftRotate(TreeNode<E> root) {
+		TreeNode<E> l = root.left;
+		if(this.root == root){
+			this.root = l;
 		}
+		root.left = l.right;
+		l.right = root;
+		return l;
+	}
 
-		//LR型平衡旋转
-		private TreeNode<E> leftRightRotate(TreeNode<E> root) {
-			root.left = rightRightRotate(root.left);
-			return leftLeftRotate(root);
-		}
+	//LR型平衡旋转
+	private TreeNode<E> leftRightRotate(TreeNode<E> root) {
+		root.left = rightRightRotate(root.left);
+		return leftLeftRotate(root);
+	}
 
-		//RR型平衡旋转
-		private TreeNode<E> rightRightRotate(TreeNode<E> root) {
-			TreeNode<E> r = root.right;
-			if(this.root == root){
-				this.root = r;
-			}
-			root.right = r.left;
-			r.left = root;
-			return r;
+	//RR型平衡旋转
+	private TreeNode<E> rightRightRotate(TreeNode<E> root) {
+		TreeNode<E> r = root.right;
+		if(this.root == root){
+			this.root = r;
 		}
+		root.right = r.left;
+		r.left = root;
+		return r;
+	}
 
-		//RL型平衡旋转
-		private TreeNode<E> rightLeftRotate(TreeNode<E> root) {
-			root.right = leftLeftRotate(root.right);
-			return rightRightRotate(root);
-		}
+	//RL型平衡旋转
+	private TreeNode<E> rightLeftRotate(TreeNode<E> root) {
+		root.right = leftLeftRotate(root.right);
+		return rightRightRotate(root);
+	}
 }
