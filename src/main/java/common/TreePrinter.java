@@ -159,7 +159,7 @@ public class TreePrinter {
 		List<TreeNode<T>> newNodes = new ArrayList<TreeNode<T>>();
 		for (TreeNode<T> node : nodes) {
 			if (node != null) {
-				System.out.print(node.val);
+				System.out.print(node.val + (node.haveColor() ? (node.isRed() ? "△" : "▉") : ""));
 				newNodes.add(node.left);
 				newNodes.add(node.right);
 			} else {
@@ -239,7 +239,7 @@ public class TreePrinter {
 				String pos = n.parent == null ? "" : ( n == n.parent.left
 						? " left" : " right");
 				String pstr = n.parent == null ? "" : n.parent.val+"";
-				String cstr = n.isRed? "R" : "B";
+				String cstr = n.isRed()? "R△" : "B▉";
 				cstr = n.parent == null ? cstr : cstr + " ";
 				System.out.print(n.val + "("+ (cstr) + pstr + (pos) + ")\t");
 				if(n.left != null){

@@ -5,13 +5,16 @@ import java.util.Queue;
 
 public class TreeNode<T extends Comparable<?>> {
 	public T val;
-	public boolean isRed;
+	private InnerColor color;
 	public TreeNode<T> left;
 	public TreeNode<T> right;
 	public TreeNode<T> parent;
 	public TreeNode(T x){
 		val = x;
 	}
+	
+	public static final InnerColor RED = InnerColor.RED;
+	public static final InnerColor BLACK = InnerColor.BLACK;
 
 	public String printBFS(){
 		StringBuilder sb = new StringBuilder();
@@ -70,6 +73,22 @@ public class TreeNode<T extends Comparable<?>> {
 			rw = right.getMaxWordWidth();
 		}
 		return Math.max(vw, Math.max(lw, rw));
+	}
+	
+	public void setColor(InnerColor color){
+		this.color = color;
+	}
+	
+	public boolean isRed(){
+	    return this.color == RED;
+	}
+	
+	public boolean haveColor(){
+		return this.color != null;
+	}
+	
+	private enum InnerColor{
+		BLACK, RED
 	}
 
 	@Override
