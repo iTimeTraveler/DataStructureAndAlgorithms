@@ -16,6 +16,27 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	}
 	
 	/**
+	 * 查找元素
+	 * @param key
+	 */
+	public TreeNode<E> search(E key){
+		if(root == null) return null;
+		
+		TreeNode<E> node = root;
+		while(node != null){
+			int compare = key.compareTo(node.val);
+			if(compare < 0){
+				node = node.left;
+			}else if(compare > 0){
+				node = node.right;
+			}else{
+				return node;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * 新增节点
 	 * @param e
 	 */
@@ -83,10 +104,10 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 				if(parent == grandfather.left){
 					boolean isLeft = (e == parent.left);
 					if(isLeft){
-						//LL型: 2. 叔叔节点为空，且祖父节点、父节点和新节点在一条斜线上
+						//LL型: case 2. 叔叔节点为空，且祖父节点、父节点和新节点在一条斜线上
 						grandfather = leftLeftRotate(grandfather);
 					}else{
-						//LR型: 3. 叔叔节点为空，且祖父节点、父节点和新节点不处于一条斜线上
+						//LR型: case 3. 叔叔节点为空，且祖父节点、父节点和新节点不处于一条斜线上
 						grandfather = leftRightRotate(grandfather);
 					}
 					grandfather.setColor(TreeNode.BLACK);
@@ -97,10 +118,10 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 				}else{
 					boolean isRight = (e == parent.right);
 					if(isRight){
-						//RR型: 2. 叔叔节点为空，且祖父节点、父节点和新节点在一条斜线上
+						//RR型: case 2. 叔叔节点为空，且祖父节点、父节点和新节点在一条斜线上
 						grandfather = rightRightRotate(grandfather);
 					}else{
-						//RL型: 3. 叔叔节点为空，且祖父节点、父节点和新节点不处于一条斜线上
+						//RL型: case 3. 叔叔节点为空，且祖父节点、父节点和新节点不处于一条斜线上
 						grandfather = rightLeftRotate(grandfather);
 					}
 					grandfather.setColor(TreeNode.BLACK);
@@ -109,7 +130,7 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 					//互换颜色可能导致上层规则被破坏，继续向上追溯
 					parent = grandfather.parent;
 				}
-			}else{	//1. 叔叔节点也为红色
+			}else{	//case 1. 叔叔节点也为红色（不可能既不为空还为黑色）
 				parent.setColor(TreeNode.BLACK);
 				uncle.setColor(TreeNode.BLACK);
 				grandfather.setColor(TreeNode.RED);
@@ -122,6 +143,119 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 		root.setColor(TreeNode.BLACK);
 	}
 	
+	/**
+	 * 删除节点
+	 * @param e
+	 */
+	public void delete(E e){
+		if(root == null) return;
+		
+		TreeNode<E> node = root;
+		while(node != null){
+			int compare = e.compareTo(node.val);
+			if(compare < 0){
+				node = node.left;
+			}else if(compare > 0){
+				node = node.right;
+			}else{
+				TreeNode<E> parent = node.parent;
+				if(node.right != null){
+					//从右子树中找到最小值节点替换到需要被删除的地方
+					TreeNode<E> min = node.right;
+					while(min != null && min.left != null){
+						min = min.left;
+					}
+					
+					boolean minIsBlack = !min.isRed();
+					min.setColor(node.isRed()? TreeNode.RED : TreeNode.BLACK);
+					if(min == node.right){
+						min.left = node.left;
+						min.parent = node.parent;
+					}else{
+						//最小节点的孩子（只可能有右节点）交给爷爷的左节点
+						min.parent.left = min.right;
+						if(min.right != null){
+							min.right.parent = min.parent;
+						}
+						min.left = node.left;
+						min.right = node.right;
+						min.parent = node.parent;
+					}
+					
+					// 旧节点node的孩子们的父节点设为新的min
+					if(min.left != null){
+						min.left.parent = min;
+					}
+					if(min.right != null){
+						min.right.parent = min;
+					}
+					
+					// 旧节点node父节点指针指向新的min
+					if(parent != null){
+						if(node == parent.left){
+							parent.left = min;
+						}else if(node == parent.right){
+							parent.right = min;
+						}
+					}else{
+						root = min;
+					}
+					
+					node.left = null;
+					node.right = null;
+					node.parent = null;
+					
+					if(minIsBlack){
+//						fixupDelete();
+					}
+				}else{
+					//直接将左子树提上来补到这个要被删除节点的位置
+					if(parent != null){
+						if(node == parent.left){
+							parent.left = node.left;
+						}else if(node == parent.right){
+							parent.right = node.left;
+						}
+						if(node.left != null){
+							node.left.parent = parent;
+						}
+					}else{
+						root = node.left;
+						if(node.left != null){
+							node.left.parent = null;
+						}
+					}
+					node.left = null;
+					node.right = null;
+					node.parent = null;
+				}
+				
+				// 保证根节点是黑色
+				if(root != null){
+					root.setColor(TreeNode.BLACK);
+				}
+				return;
+			}
+		}
+	}
+	
+	/**
+	 * 删除修复操作是针对删除黑色节点才有的
+	 * 
+	 * 删除修复操作在遇到被删除的节点是红色节点或者到达root节点时，修复操作完毕。
+	 * @param e
+	 */
+	private void fixupDelete(TreeNode<E> e){
+		if(e == null) return;
+		
+	}
+	
+	
+	/**
+	 * 获取叔叔节点
+	 * @param e
+	 * @return
+	 */
 	private TreeNode<E> getUncle(TreeNode<E> e){
 		if(e == null) return null;
 		TreeNode<E> parent = e.parent;
@@ -134,6 +268,24 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 			return grandFather.right;
 		}else if(parent == grandFather.right){
 			return grandFather.left;
+		}
+		return null;
+	}
+	
+	/**
+	 * 获取兄弟节点
+	 * @param e
+	 * @return
+	 */
+	private TreeNode<E> getBrother(TreeNode<E> e){
+		if(e == null) return null;
+		TreeNode<E> parent = e.parent;
+		
+		if(parent == null) return null;
+		if(e == parent.left){
+			return parent.right;
+		}else if(e == parent.right){
+			return parent.left;
 		}
 		return null;
 	}

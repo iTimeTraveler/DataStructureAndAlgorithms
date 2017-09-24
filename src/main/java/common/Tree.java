@@ -39,7 +39,34 @@ public class Tree<E extends Comparable<?>>{
 				+ (node.right != null ? Tree.lastTraverse(node.right) + ", " : "")
 				+ String.valueOf(node.val) + ", ");
 	}
+	
+	/*
+	 * 最小值
+	 */
+	public static <T extends Comparable<?>> TreeNode<T> getMinElement(TreeNode<T> node) {
+		if(node == null) return null;
+		while(node.left != null){
+			node = node.left;
+		}
+		return node;
+	}
+	
+	/**
+	 * 最大值
+	 */
+	public static <T extends Comparable<?>> TreeNode<T> getMaxElement(TreeNode<T> node) {
+		if(node == null) return null;
+		while(node.right != null){
+			node = node.right;
+		}
+		return node;
+	}
 
+	/**
+	 * 树的高度
+	 * @param node
+	 * @return
+	 */
 	public static <T extends Comparable<?>> int maxHeight(TreeNode<T> node) {
 		if (node == null)
 			return 0;
