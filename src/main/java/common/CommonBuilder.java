@@ -1,4 +1,4 @@
-package main.java.common;
+package common;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -7,8 +7,10 @@ import java.util.List;
 
 public class CommonBuilder {
 	public static void main(String[] args) {
-//		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9,10,12,13,14,16,18,19,20,36);
-		List<Integer> nums = Arrays.asList(6,2,9,4,5,7,3,8,1);
+		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9,10,12,13,14,16,18,19,20,36);
+//		List<Integer> nums = Arrays.asList(1,2,3);
+//		List<Integer> nums = Arrays.asList(6,2,9,4,5,7,3,8,1);
+//		List<Integer> nums = Arrays.asList(6,2,9,4,5,7,3,8);
 //		Tree<Integer> tree = buildBSTTree(nums);
 //		System.out.println(tree.root.printDFS());
 //		System.out.println(tree.root.printBFS());
@@ -41,6 +43,15 @@ public class CommonBuilder {
         }
 		TreePrinter.printTree(rbTree.root);
 		TreePrinter.printRBDetails(rbTree.root);
+
+		List<Integer> dels = Arrays.asList(2,4,7,9,5);
+//		for(int i=0; i<dels.size(); i++) {
+//			System.out.println("===================delete " + dels.get(i) + "==================");
+//			rbTree.delete(dels.get(i));
+//			TreePrinter.printTree(rbTree.root);
+//			TreePrinter.printRBDetails(rbTree.root);
+//		}
+
 	}
 
 	/**

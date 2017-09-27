@@ -1,4 +1,4 @@
-package main.java.common;
+package common;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -78,7 +78,11 @@ public class TreeNode<T extends Comparable<?>> {
 	public void setColor(InnerColor color){
 		this.color = color;
 	}
-	
+
+	public InnerColor getColor(){
+		return this.color;
+	}
+
 	public boolean isRed(){
 	    return this.color == RED;
 	}
