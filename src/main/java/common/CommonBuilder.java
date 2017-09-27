@@ -7,8 +7,8 @@ import java.util.List;
 
 public class CommonBuilder {
 	public static void main(String[] args) {
-		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9,10,12,13,14,16,18,19,20,36);
-//		List<Integer> nums = Arrays.asList(1,2,3);
+//		List<Integer> nums = Arrays.asList(1,3,4,6,7,8,9,10,12,13,14,16,18,19,20,36);
+		List<Integer> nums = Arrays.asList(1,2,3,4,5,6,7,8);
 //		List<Integer> nums = Arrays.asList(6,2,9,4,5,7,3,8,1);
 //		List<Integer> nums = Arrays.asList(6,2,9,4,5,7,3,8);
 //		Tree<Integer> tree = buildBSTTree(nums);

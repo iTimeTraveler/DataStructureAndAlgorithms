@@ -1,4 +1,4 @@
-package main.java.common;
+package common;
 
 
 public class AVLTree<E extends Comparable<E>> extends Tree<E>{

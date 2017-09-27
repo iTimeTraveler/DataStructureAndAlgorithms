@@ -96,8 +96,8 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	private void fixAfterInsertion(TreeNode<E> e){
 		if(e == null) return;
 		
-		TreeNode<E> parent = e.parent;
-		while(parent != null && parent.isRed()){
+		while(e != null && e != root && e.parent != null && e.parent.isRed()){
+			TreeNode<E> parent = e.parent;
 			TreeNode<E> uncle = getUncle(e, parent);
 			TreeNode<E> grandfather = parent.parent;
 			
@@ -116,7 +116,7 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 					grandfather.right.setColor(TreeNode.RED);
 					
 					//互换颜色可能导致上层规则被破坏，继续向上追溯
-					parent = grandfather.parent;
+					e = grandfather;
 				}else{
 					boolean isRight = (e == parent.right);
 					if(isRight){
@@ -130,7 +130,7 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 					grandfather.left.setColor(TreeNode.RED);
 					
 					//互换颜色可能导致上层规则被破坏，继续向上追溯
-					parent = grandfather.parent;
+					e = grandfather;
 				}
 			}else{	//case 1. 叔叔节点也为红色（不可能既不为空还为黑色）
 				parent.setColor(TreeNode.BLACK);
@@ -138,11 +138,10 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 				grandfather.setColor(TreeNode.RED);
 				
 				e = grandfather;
-				parent = e.parent;
 			}
 		}
 		// 保证根节点是黑色
-		root.setColor(TreeNode.BLACK);
+		setColor(root, BLACK);
 	}
 	
 	/**
@@ -223,9 +222,7 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 				}
 
 				// 保证根节点是黑色
-				if(root != null){
-					root.setColor(TreeNode.BLACK);
-				}
+				setColor(root, BLACK);
 				return;
 			}
 		}
@@ -245,43 +242,43 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	 *        /
 	 *       7
 	 *
-	 * @param oldNode  old
+	 * @param old  old
 	 * @param newNode  new
 	 */
-	private void replaceWithUniqueSon(TreeNode<E> oldNode, TreeNode<E> newNode){
-		if(oldNode == null || newNode == null) return;
+	private void replaceWithUniqueSon(TreeNode<E> old, TreeNode<E> newNode){
+		if(old == null || newNode == null) return;
 		TreeNode<E> newNodeParent = newNode.parent;
-		if(newNodeParent == oldNode){		//如果是用旧节点的子节点替换它，防止父子关系出现死循环
+		if(newNodeParent == old){		//如果是用旧节点的子节点替换它，防止父子关系出现死循环
 			if(newNode == newNodeParent.left){
-				newNode.right = oldNode.right;
-				newNode.parent = oldNode.parent;
-				if(oldNode.right != null){
-					oldNode.right.parent = newNode;
+				newNode.right = old.right;
+				newNode.parent = old.parent;
+				if(old.right != null){
+					old.right.parent = newNode;
 				}
 			}else if(newNode == newNodeParent.right){
-				newNode.left = oldNode.left;
-				newNode.parent = oldNode.parent;
-				if(oldNode.left != null){
-					oldNode.left.parent = newNode;
+				newNode.left = old.left;
+				newNode.parent = old.parent;
+				if(old.left != null){
+					old.left.parent = newNode;
 				}
 			}
 		}else{
-			newNode.left = oldNode.left;
-			newNode.right = oldNode.right;
-			newNode.parent = oldNode.parent;
+			newNode.left = old.left;
+			newNode.right = old.right;
+			newNode.parent = old.parent;
 		}
-		newNode.setColor(oldNode.getColor());
+		newNode.setColor(old.getColor());
 
-		TreeNode<E> oldParent = oldNode.parent;
+		TreeNode<E> oldParent = old.parent;
 		if(oldParent != null){
-			if(oldNode == oldParent.left){
+			if(old == oldParent.left){
 				oldParent.left = newNode;
-			}else if(oldNode == oldParent.right){
+			}else if(old == oldParent.right){
 				oldParent.right = newNode;
 			}
 		}
 
-		oldNode.left = oldNode.right = oldNode.parent = null;
+		old.left = old.right = old.parent = null;
 	}
 	
 	/**
@@ -307,7 +304,6 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 					rightRightRotate(parentOf(x));
 					brother = rightOf(parentOf(x));
 				}
-
 				// case 2：兄弟节点是黑色，且兄弟节点的两个子节点全为黑色（将兄弟节点涂红，然后往上递归）
 				if(colorOf(leftOf(brother)) == BLACK && colorOf(rightOf(brother)) == BLACK){
 					setColor(brother, RED);
@@ -319,7 +315,6 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 						setColor(leftOf(brother), BLACK);
 						leftLeftRotate(brother);
 					}
-
 					// case 4：兄弟节点是黑色，但是兄弟节点的右子是红色，左子的颜色任意（调换brother和parent的颜色，并将brother->right涂黑, 再对parent进行一次左旋）
 					setColor(brother, colorOf(parentOf(x)));
 					setColor(parentOf(x), BLACK);
@@ -337,7 +332,6 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 					leftLeftRotate(parentOf(x));
 					brother = leftOf(parentOf(x));
 				}
-
 				// case 2：兄弟节点是黑色，且兄弟节点的两个子节点全为黑色（将兄弟节点涂红，然后往上递归）
 				if(colorOf(leftOf(brother)) == BLACK && colorOf(rightOf(brother)) == BLACK){
 					setColor(brother, RED);
@@ -349,7 +343,6 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 						setColor(leftOf(brother), BLACK);
 						leftLeftRotate(brother);
 					}
-
 					// case 4：兄弟节点是黑色，但是兄弟节点的右子是红色，左子的颜色任意（调换brother和parent的颜色，并将brother->right涂黑, 再对parent进行一次左旋）
 					setColor(brother, colorOf(parentOf(x)));
 					setColor(parentOf(x), BLACK);
