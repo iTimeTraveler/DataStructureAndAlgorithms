@@ -1,4 +1,4 @@
-package common;
+package main.java.common;
 
 /**
  * RBTree红黑树的定义如下:
@@ -89,55 +89,59 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	 * 只有在父节点为红色节点的时候是需要插入修复操作，分为以下的三种情况
 	 * 
 	 * case 1. 叔叔节点也为红色。（将父节点和叔叔节点与祖父节点的颜色互换）
-	 * case 2. 叔叔节点为空，且祖父节点、父节点和新节点处于一条斜线上。（将B父节点进行旋转操作，并且和祖父节点A互换颜色）
-	 * case 3. 叔叔节点为空，且祖父节点、父节点和新节点不处于一条斜线上。（将C当前节点进行旋转，然后就成了上面这个case 2）
-	 * @param e
+	 * case 2. 叔叔节点为空，且祖父节点、父节点和新节点不处于一条斜线上。（将C当前节点进行旋转，然后就成了这个case 3）
+	 * case 3. 叔叔节点为空，且祖父节点、父节点和新节点处于一条斜线上。（将B父节点进行旋转操作，并且和祖父节点A互换颜色）
+	 * @param x
 	 */
-	private void fixAfterInsertion(TreeNode<E> e){
-		if(e == null) return;
+	private void fixAfterInsertion(TreeNode<E> x){
+		if(x == null) return;
 		
-		while(e != null && e != root && e.parent != null && e.parent.isRed()){
-			TreeNode<E> parent = e.parent;
-			TreeNode<E> uncle = getUncle(e, parent);
+		while(x.parent != null && x.parent.isRed()){
+			TreeNode<E> parent = x.parent;
+			TreeNode<E> uncle = getUncle(x, parent);
 			TreeNode<E> grandfather = parent.parent;
 			
 			//grandfather must be NOT null, because parent color is Red and could NOT be root.
-			if(uncle == null){
+			if(uncle == null || colorOf(uncle) == BLACK){
 				if(parent == grandfather.left){
-					boolean isLeft = (e == parent.left);
-					if(isLeft){
-						//LL型: case 2. 叔叔节点为空，且祖父节点、父节点和新节点在一条斜线上
-						grandfather = leftLeftRotate(grandfather);
-					}else{
-						//LR型: case 3. 叔叔节点为空，且祖父节点、父节点和新节点不处于一条斜线上
-						grandfather = leftRightRotate(grandfather);
+					boolean isRight = (x == parent.right);
+					if(!isRight){
+						//LR型: case 2. 叔叔节点为空，且祖父节点、父节点和新节点不处于一条斜线上
+						rotateToLeft(parent);
 					}
-					grandfather.setColor(TreeNode.BLACK);
-					grandfather.right.setColor(TreeNode.RED);
+					//LL型: case 3. 叔叔节点为空，且祖父节点、父节点和新节点在一条斜线上
+					rotateToRight(grandfather);
 					
 					//互换颜色可能导致上层规则被破坏，继续向上追溯
-					e = grandfather;
-				}else{
-					boolean isRight = (e == parent.right);
 					if(isRight){
-						//RR型: case 2. 叔叔节点为空，且祖父节点、父节点和新节点在一条斜线上
-						grandfather = rightRightRotate(grandfather);
+						setColor(x, BLACK);
 					}else{
-						//RL型: case 3. 叔叔节点为空，且祖父节点、父节点和新节点不处于一条斜线上
-						grandfather = rightLeftRotate(grandfather);
+						setColor(parent, BLACK);
 					}
-					grandfather.setColor(TreeNode.BLACK);
-					grandfather.left.setColor(TreeNode.RED);
+					setColor(grandfather, RED);
+				}else{
+					boolean isLeft = (x == parent.left);
+					if(isLeft){
+						//RL型: case 3. 叔叔节点为空，且祖父节点、父节点和新节点不处于一条斜线上
+						rotateToRight(parent);
+					}
+					//RR型: case 2. 叔叔节点为空，且祖父节点、父节点和新节点在一条斜线上
+					rotateToLeft(grandfather);
 					
 					//互换颜色可能导致上层规则被破坏，继续向上追溯
-					e = grandfather;
+					if(isLeft){
+						setColor(x, BLACK);
+					}else{
+						setColor(parent, BLACK);
+					}
+					setColor(grandfather, RED);
 				}
-			}else{	//case 1. 叔叔节点也为红色（不可能既不为空还为黑色）
+			}else{	//case 1. 叔叔节点也为红色
 				parent.setColor(TreeNode.BLACK);
 				uncle.setColor(TreeNode.BLACK);
 				grandfather.setColor(TreeNode.RED);
 				
-				e = grandfather;
+				x = grandfather;
 			}
 		}
 		// 保证根节点是黑色
@@ -163,63 +167,74 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 				TreeNode<E> replacement = node;
 				TreeNode<E> removeNode = node;
 				TreeNode<E> parent = node.parent;
-				if(node.left == null && node.right == null){
-					// 如果左右子树均为空：直接删除
-					if(isOriginalBlack){
-						fixAfterDeletion(node);
+				
+				// 如果左右子树都存在：从右子树中找到最小值节点替换到需要被删除的地方
+				if(node.left != null && node.right != null){
+					removeNode = node.right;
+					while(removeNode.left != null){
+						removeNode = removeNode.left;
 					}
-
-					if(parent != null){
-						if(node == parent.left){
-							parent.left = null;
-						}else if(node == parent.right){
-							parent.right = null;
+					
+					// 使用node的后继节点替代node，并删掉这个后继节点
+					node.val = removeNode.val;
+					node = removeNode;
+					isOriginalBlack = !removeNode.isRed();
+				}
+				
+				// 如果只有左子树：把左子树提上来替换掉要被删除的node
+				// 如果只有右子树：把右子树提上来替换掉要被删除的node
+				replacement = (node.left != null) ? node.left : node.right;
+				if(replacement != null){
+					replaceWithUniqueSon(node, replacement);
+					
+					// 修复操作
+					if(isOriginalBlack){
+						// x 要么是一个红节点，要么是一个 NIL 的叶节点，而不可能是一个内部节点
+						fixAfterDeletion(replacement);
+					}
+				}else{
+					// 如果左右子树均为空：直接删除
+					if(node.parent != null){
+						if(isOriginalBlack){
+							fixAfterDeletion(node);
+						}
+						if(node == node.parent.left){
+							node.parent.left = null;
+						}else if(node == node.parent.right){
+							node.parent.right = null;
 						}
 						node.parent = null;
 					}else{
 						root = null;
 					}
-					return;
-				}else if(node.left != null && node.right == null){
-					// 如果只有左子树：把左子树提上来替换掉要被删除的node
-					replacement = node.left;
-					replaceWithUniqueSon(node, node.left);
-				}else if(node.right != null && node.left == null){
-					// 如果只有右子树：把右子树提上来替换掉要被删除的node
-					replacement = node.right;
-					replaceWithUniqueSon(node, node.right);
-				}else{
-					// 如果左右子树都存在：从右子树中找到最小值节点替换到需要被删除的地方
-					removeNode = node.right;
-					while(removeNode.left != null){
-						removeNode = removeNode.left;
-					}
-
-					isOriginalBlack = !removeNode.isRed();
-					replacement = removeNode.right;
-					if(removeNode == node.right){	//右子树没有左孩子
-						replaceWithUniqueSon(node, node.right);
-					}else{
-						// 使用node的后继节点替代node，并删掉这个后继节点
-						node.val = removeNode.val;
-
-						if(removeNode.right == null){
-							if(removeNode == removeNode.parent.left){
-								removeNode.parent.left = null;
-							}else if(removeNode == removeNode.parent.right){
-								removeNode.parent.right = null;
-							}
-						}else{
-							replaceWithUniqueSon(removeNode, removeNode.right);
-						}
-					}
 				}
-
-				// 修复操作
-				if(isOriginalBlack){
-					// x 要么是一个红节点，要么是一个 NIL 的叶节点，而不可能是一个内部节点
-					fixAfterDeletion(replacement);
-				}
+				
+//				else if(node.left != null && node.right == null){
+//					replacement = node.left;
+//					replaceWithUniqueSon(node, node.left);
+//				}else if(node.right != null && node.left == null){
+//					replacement = node.right;
+//					replaceWithUniqueSon(node, node.right);
+//				}else{
+//					
+//					replacement = removeNode.right;
+//					if(removeNode == node.right){	//右子树没有左孩子
+//						replaceWithUniqueSon(node, node.right);
+//					}else{
+//						// 使用node的后继节点替代node，并删掉这个后继节点
+//						node.val = removeNode.val;
+//
+//						if(removeNode.right == null){
+//							if(removeNode == removeNode.parent.left){
+//								removeNode.parent.left = null;
+//							}else if(removeNode == removeNode.parent.right){
+//								removeNode.parent.right = null;
+//							}
+//						}else{
+//							replaceWithUniqueSon(removeNode, removeNode.right);
+//						}
+//					}
+//				}
 
 				// 保证根节点是黑色
 				setColor(root, BLACK);
@@ -293,7 +308,7 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	 * @param x
 	 */
 	private void fixAfterDeletion(TreeNode<E> x){
-		while(x != root && !x.isRed()){
+		while(x != root && colorOf(x) == BLACK){
 			if(x == leftOf(parentOf(x))){
 				TreeNode<E> brother = rightOf(parentOf(x));
 
@@ -301,7 +316,7 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 				if(colorOf(brother) == RED){
 					setColor(brother, BLACK);
 					setColor(parentOf(x), RED);
-					rightRightRotate(parentOf(x));
+					rotateToLeft(parentOf(x));
 					brother = rightOf(parentOf(x));
 				}
 				// case 2：兄弟节点是黑色，且兄弟节点的两个子节点全为黑色（将兄弟节点涂红，然后往上递归）
@@ -313,13 +328,14 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 					if(colorOf(rightOf(brother)) == BLACK){
 						setColor(brother, RED);
 						setColor(leftOf(brother), BLACK);
-						leftLeftRotate(brother);
+						rotateToRight(brother);
+						brother = rightOf(parentOf(x));
 					}
 					// case 4：兄弟节点是黑色，但是兄弟节点的右子是红色，左子的颜色任意（调换brother和parent的颜色，并将brother->right涂黑, 再对parent进行一次左旋）
 					setColor(brother, colorOf(parentOf(x)));
 					setColor(parentOf(x), BLACK);
 					setColor(rightOf(brother), BLACK);
-					rightRightRotate(parentOf(x));
+					rotateToLeft(parentOf(x));
 					x = root;	// 修复完成，退出
 				}
 			}else{
@@ -329,7 +345,7 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 				if(colorOf(brother) == RED){
 					setColor(brother, BLACK);
 					setColor(parentOf(x), RED);
-					leftLeftRotate(parentOf(x));
+					rotateToRight(parentOf(x));
 					brother = leftOf(parentOf(x));
 				}
 				// case 2：兄弟节点是黑色，且兄弟节点的两个子节点全为黑色（将兄弟节点涂红，然后往上递归）
@@ -338,20 +354,23 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 					x = parentOf(x);
 				}else{
 					// case 3：兄弟节点是黑色，兄弟的左子是红色，右子是黑色（brother->left是红色，我们就将其涂黑，然后将brother涂红，再对brother进行右旋，就转化成了case4）
-					if(colorOf(rightOf(brother)) == BLACK){
+					if(colorOf(leftOf(brother)) == BLACK){
 						setColor(brother, RED);
-						setColor(leftOf(brother), BLACK);
-						leftLeftRotate(brother);
+						setColor(rightOf(brother), BLACK);
+						rotateToLeft(brother);
+						brother = leftOf(parentOf(x));
 					}
 					// case 4：兄弟节点是黑色，但是兄弟节点的右子是红色，左子的颜色任意（调换brother和parent的颜色，并将brother->right涂黑, 再对parent进行一次左旋）
 					setColor(brother, colorOf(parentOf(x)));
 					setColor(parentOf(x), BLACK);
-					setColor(rightOf(brother), BLACK);
-					rightRightRotate(parentOf(x));
+					setColor(leftOf(brother), BLACK);
+					rotateToRight(parentOf(x));
 					x = root;	// 修复完成，退出
 				}
 			}
 		}
+		// 将x设置为黑色
+		setColor(x, BLACK);
 	}
 	
 	
@@ -398,7 +417,7 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	}
 
 	//LL型平衡旋转
-	private TreeNode<E> leftLeftRotate(TreeNode<E> root) {
+	private TreeNode<E> rotateToRight(TreeNode<E> root) {
 		TreeNode<E> rootParent = root.parent;
 		TreeNode<E> l = root.left;		//new root is l.
 		l.parent = rootParent;
@@ -421,18 +440,11 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 		}else{
 			this.root = l;
 		}
-		root = l;
-		return root;
-	}
-
-	//LR型平衡旋转
-	private TreeNode<E> leftRightRotate(TreeNode<E> root) {
-		root.left = rightRightRotate(root.left);
-		return leftLeftRotate(root);
+		return l;
 	}
 
 	//RR型平衡旋转
-	private TreeNode<E> rightRightRotate(TreeNode<E> root) {
+	private TreeNode<E> rotateToLeft(TreeNode<E> root) {
 		TreeNode<E> rootParent = root.parent;
 		TreeNode<E> r = root.right;		//new root is r.
 		r.parent = rootParent;
@@ -455,13 +467,6 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 		}else{
 			this.root = r;
 		}
-		root = r;
-		return root;
-	}
-
-	//RL型平衡旋转
-	private TreeNode<E> rightLeftRotate(TreeNode<E> root) {
-		root.right = leftLeftRotate(root.right);
-		return rightRightRotate(root);
+		return r;
 	}
 }
