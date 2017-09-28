@@ -1,4 +1,9 @@
-package main.java.common;
+package binarytree;
+
+import java.util.Arrays;
+import java.util.List;
+
+import common.BSTreeNode;
 
 /**
  * RBTree红黑树的定义如下:
@@ -9,11 +14,11 @@ package main.java.common;
  * 4. 任何一个节点向下遍历到其子孙的叶子节点，所经过的黑节点个数必须相等
  * 5. 空节点被认为是黑色的
  */
-public class RBTree<E extends Comparable<E>> extends Tree<E>{
+public class RBTree<E extends Comparable<E>> extends BinaryTree<E> {
 	private static boolean BLACK = true;
 	private static boolean RED = false;
 
-	public RBTree(TreeNode<E> root) {
+	public RBTree(BSTreeNode<E> root) {
 		super(root);
 	}
 	
@@ -21,10 +26,10 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	 * 查找元素
 	 * @param key
 	 */
-	public TreeNode<E> search(E key){
+	public BSTreeNode<E> search(E key){
 		if(root == null) return null;
 		
-		TreeNode<E> node = root;
+		BSTreeNode<E> node = root;
 		while(node != null){
 			int compare = key.compareTo(node.val);
 			if(compare < 0){
@@ -44,19 +49,19 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	 */
 	public void insert(E e){
 		if(root == null){
-			root = new TreeNode<E>(e);
-			root.setColor(TreeNode.BLACK);
+			root = new BSTreeNode<E>(e);
+			root.setColor(BSTreeNode.BLACK);
 			root.parent = null;
 		}else{
-			TreeNode<E> node = root;
+			BSTreeNode<E> node = root;
 			while(node != null){
 				int compare = e.compareTo(node.val);
 				if(compare < 0){
 					if(node.left != null){
 						node = node.left;
 					}else{
-						TreeNode<E> tmp = new TreeNode<E>(e);
-						tmp.setColor(TreeNode.RED);		//new node color is red.
+						BSTreeNode<E> tmp = new BSTreeNode<E>(e);
+						tmp.setColor(BSTreeNode.RED);		//new node color is red.
 						tmp.parent = node;
 						
 						node.left = tmp;
@@ -67,8 +72,8 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 					if(node.right != null){
 						node = node.right;
 					}else{
-						TreeNode<E> tmp = new TreeNode<E>(e);
-						tmp.setColor(TreeNode.RED);		//new node color is red.
+						BSTreeNode<E> tmp = new BSTreeNode<E>(e);
+						tmp.setColor(BSTreeNode.RED);		//new node color is red.
 						tmp.parent = node;
 						
 						node.right = tmp;
@@ -93,13 +98,13 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	 * case 3. 叔叔节点为空，且祖父节点、父节点和新节点处于一条斜线上。（将B父节点进行旋转操作，并且和祖父节点A互换颜色）
 	 * @param x
 	 */
-	private void fixAfterInsertion(TreeNode<E> x){
+	private void fixAfterInsertion(BSTreeNode<E> x){
 		if(x == null) return;
 		
 		while(x.parent != null && x.parent.isRed()){
-			TreeNode<E> parent = x.parent;
-			TreeNode<E> uncle = getUncle(x, parent);
-			TreeNode<E> grandfather = parent.parent;
+			BSTreeNode<E> parent = x.parent;
+			BSTreeNode<E> uncle = getUncle(x, parent);
+			BSTreeNode<E> grandfather = parent.parent;
 			
 			//grandfather must be NOT null, because parent color is Red and could NOT be root.
 			if(uncle == null || colorOf(uncle) == BLACK){
@@ -137,9 +142,9 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 					setColor(grandfather, RED);
 				}
 			}else{	//case 1. 叔叔节点也为红色
-				parent.setColor(TreeNode.BLACK);
-				uncle.setColor(TreeNode.BLACK);
-				grandfather.setColor(TreeNode.RED);
+				parent.setColor(BSTreeNode.BLACK);
+				uncle.setColor(BSTreeNode.BLACK);
+				grandfather.setColor(BSTreeNode.RED);
 				
 				x = grandfather;
 			}
@@ -155,7 +160,7 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	public void delete(E e){
 		if(root == null) return;
 
-		TreeNode<E> node = root;
+		BSTreeNode<E> node = root;
 		while(node != null){
 			int compare = e.compareTo(node.val);
 			if(compare < 0){
@@ -164,9 +169,9 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 				node = node.right;
 			}else{
 				boolean isOriginalBlack = !node.isRed();
-				TreeNode<E> replacement = node;
-				TreeNode<E> removeNode = node;
-				TreeNode<E> parent = node.parent;
+				BSTreeNode<E> replacement = node;
+				BSTreeNode<E> removeNode = node;
+				BSTreeNode<E> parent = node.parent;
 				
 				// 如果左右子树都存在：从右子树中找到最小值节点替换到需要被删除的地方
 				if(node.left != null && node.right != null){
@@ -260,9 +265,9 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	 * @param old  old
 	 * @param newNode  new
 	 */
-	private void replaceWithUniqueSon(TreeNode<E> old, TreeNode<E> newNode){
+	private void replaceWithUniqueSon(BSTreeNode<E> old, BSTreeNode<E> newNode){
 		if(old == null || newNode == null) return;
-		TreeNode<E> newNodeParent = newNode.parent;
+		BSTreeNode<E> newNodeParent = newNode.parent;
 		if(newNodeParent == old){		//如果是用旧节点的子节点替换它，防止父子关系出现死循环
 			if(newNode == newNodeParent.left){
 				newNode.right = old.right;
@@ -284,7 +289,7 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 		}
 		newNode.setColor(old.getColor());
 
-		TreeNode<E> oldParent = old.parent;
+		BSTreeNode<E> oldParent = old.parent;
 		if(oldParent != null){
 			if(old == oldParent.left){
 				oldParent.left = newNode;
@@ -307,10 +312,10 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	 * 删除修复操作在遇到被删除的节点是红色节点或者到达root节点时，修复操作完毕。
 	 * @param x
 	 */
-	private void fixAfterDeletion(TreeNode<E> x){
+	private void fixAfterDeletion(BSTreeNode<E> x){
 		while(x != root && colorOf(x) == BLACK){
 			if(x == leftOf(parentOf(x))){
-				TreeNode<E> brother = rightOf(parentOf(x));
+				BSTreeNode<E> brother = rightOf(parentOf(x));
 
 				// case 1：兄弟节点为红色，此时父节点和兄弟节点的子节点均为黑（交换brother和parent颜色，并旋转，就转化成了case2）
 				if(colorOf(brother) == RED){
@@ -339,7 +344,7 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 					x = root;	// 修复完成，退出
 				}
 			}else{
-				TreeNode<E> brother = leftOf(parentOf(x));
+				BSTreeNode<E> brother = leftOf(parentOf(x));
 
 				// case 1：兄弟节点为红色，此时父节点和兄弟节点的子节点均为黑（交换brother和parent颜色，并旋转，就转化成了case2）
 				if(colorOf(brother) == RED){
@@ -379,12 +384,12 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	 * @param e
 	 * @return
 	 */
-	private TreeNode<E> getUncle(TreeNode<E> e, TreeNode<E> parent){
+	private BSTreeNode<E> getUncle(BSTreeNode<E> e, BSTreeNode<E> parent){
 		parent = (e == null ? parent : e.parent);
 		if(parent == null) return null;
 		if(e == null) return parent.left == null ? parent.right : parent.left;
 
-		TreeNode<E> grandFather = parent.parent;
+		BSTreeNode<E> grandFather = parent.parent;
 		if(grandFather == null) return null;
 		if(parent == grandFather.left){
 			return grandFather.right;
@@ -394,32 +399,32 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 		return null;
 	}
 	
-	private static <E extends Comparable<?>> TreeNode<E> leftOf(TreeNode<E> e){
+	private static <E extends Comparable<?>> BSTreeNode<E> leftOf(BSTreeNode<E> e){
 		return (e == null) ? null : e.left;
 	}
 
-	private static <E extends Comparable<?>> TreeNode<E> rightOf(TreeNode<E> e){
+	private static <E extends Comparable<?>> BSTreeNode<E> rightOf(BSTreeNode<E> e){
 		return (e == null) ? null : e.right;
 	}
 
-	private static <E extends Comparable<?>> TreeNode<E> parentOf(TreeNode<E> e){
+	private static <E extends Comparable<?>> BSTreeNode<E> parentOf(BSTreeNode<E> e){
 		return (e == null) ? null : e.parent;
 	}
 
-	private static <E extends Comparable<?>> void setColor(TreeNode<E> e, boolean isBlack){
+	private static <E extends Comparable<?>> void setColor(BSTreeNode<E> e, boolean isBlack){
 		if(e != null){
-			e.setColor(isBlack ? TreeNode.BLACK : TreeNode.RED);
+			e.setColor(isBlack ? BSTreeNode.BLACK : BSTreeNode.RED);
 		}
 	}
 
-	private static <E extends Comparable<?>> boolean colorOf(TreeNode<E> e){
-		return (e == null) || !(e.getColor() == TreeNode.RED);
+	private static <E extends Comparable<?>> boolean colorOf(BSTreeNode<E> e){
+		return (e == null) || !(e.getColor() == BSTreeNode.RED);
 	}
 
 	//LL型平衡旋转
-	private TreeNode<E> rotateToRight(TreeNode<E> root) {
-		TreeNode<E> rootParent = root.parent;
-		TreeNode<E> l = root.left;		//new root is l.
+	private BSTreeNode<E> rotateToRight(BSTreeNode<E> root) {
+		BSTreeNode<E> rootParent = root.parent;
+		BSTreeNode<E> l = root.left;		//new root is l.
 		l.parent = rootParent;
 		
 		root.left = l.right;
@@ -444,9 +449,9 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 	}
 
 	//RR型平衡旋转
-	private TreeNode<E> rotateToLeft(TreeNode<E> root) {
-		TreeNode<E> rootParent = root.parent;
-		TreeNode<E> r = root.right;		//new root is r.
+	private BSTreeNode<E> rotateToLeft(BSTreeNode<E> root) {
+		BSTreeNode<E> rootParent = root.parent;
+		BSTreeNode<E> r = root.right;		//new root is r.
 		r.parent = rootParent;
 		
 		root.right = r.left;
@@ -468,5 +473,27 @@ public class RBTree<E extends Comparable<E>> extends Tree<E>{
 			this.root = r;
 		}
 		return r;
+	}
+
+	public static void main(String[] args){
+//		List<Integer> nums = Arrays.asList(1,2,3,4,6,7,8,9,10,12,13,14,16,18,19,20,36);
+//		List<Integer> nums = Arrays.asList(1,2,3,4,5,6,7,8);
+		List<Integer> nums = Arrays.asList(6,2,9,4,5,7,3,8,1);
+
+		RBTree<Integer> rbTree = new RBTree<Integer>(null);
+		for(int i=0; i<nums.size(); i++) {
+			rbTree.insert(nums.get(i));
+		}
+
+		BSTPrinter.printTree(rbTree.root);
+		BSTPrinter.printRBTreeDetails(rbTree.root);
+
+		List<Integer> dels = Arrays.asList(2,4,7,9,5);
+		for(int i=0; i<dels.size(); i++) {
+			System.out.println("===================delete " + dels.get(i) + "==================");
+			rbTree.delete(dels.get(i));
+			BSTPrinter.printTree(rbTree.root);
+			BSTPrinter.printRBTreeDetails(rbTree.root);
+		}
 	}
 }

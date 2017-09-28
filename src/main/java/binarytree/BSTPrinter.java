@@ -1,4 +1,4 @@
-package main.java.common;
+package binarytree;
 
 
 import java.util.ArrayList;
@@ -6,7 +6,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TreePrinter {
+import common.BSTreeNode;
+
+public class BSTPrinter {
 
 	/**
 	 * Print a tree like this.
@@ -20,11 +22,11 @@ public class TreePrinter {
 	 * 339:0                                                      5717:0      6061:0      6271:0
 	 * 
 	 */
-	public static <T extends Comparable<?>> void print(TreeNode<T> root){
+	public static <T extends Comparable<?>> void print(BSTreeNode<T> root){
 		List<List<String>> lines = new ArrayList<List<String>>();
 
-		List<TreeNode<T>> level = new ArrayList<TreeNode<T>>();
-		List<TreeNode<T>> next = new ArrayList<TreeNode<T>>();
+		List<BSTreeNode<T>> level = new ArrayList<BSTreeNode<T>>();
+		List<BSTreeNode<T>> next = new ArrayList<BSTreeNode<T>>();
 
 		level.add(root);
 		int nn = 1;
@@ -33,7 +35,7 @@ public class TreePrinter {
 			List<String> line = new ArrayList<String>();
 
 			nn = 0;
-			for (TreeNode<T> n : level) {
+			for (BSTreeNode<T> n : level) {
 				if (n == null) {
 					line.add(null);
 
@@ -56,7 +58,7 @@ public class TreePrinter {
 
 			lines.add(line);
 
-			List<TreeNode<T>> tmp = level;
+			List<BSTreeNode<T>> tmp = level;
 			level = next;
 			next = tmp;
 			next.clear();
@@ -140,13 +142,13 @@ public class TreePrinter {
 	 *  5 8 4 5 8 4 5 8
 	 *
 	 */
-	public static <T extends Comparable<?>> void printTree(TreeNode<T> root){
-		int maxLevel = Tree.maxHeight(root);
+	public static <T extends Comparable<?>> void printTree(BSTreeNode<T> root){
+		int maxLevel = BinaryTree.maxHeight(root);
 		printNodeInternal(Collections.singletonList(root), 1, maxLevel);
 	}
 
-	private static <T extends Comparable<?>> void printNodeInternal(List<TreeNode<T>> nodes, int level, int maxLevel) {
-		if (nodes.isEmpty() || TreePrinter.isAllElementsNull(nodes))
+	private static <T extends Comparable<?>> void printNodeInternal(List<BSTreeNode<T>> nodes, int level, int maxLevel) {
+		if (nodes.isEmpty() || BSTPrinter.isAllElementsNull(nodes))
 			return;
 
 		int floor = maxLevel - level;
@@ -154,10 +156,10 @@ public class TreePrinter {
 		int firstSpaces = (int) Math.pow(2, (floor)) - 1;
 		int betweenSpaces = (int) Math.pow(2, (floor + 1)) - 1;
 
-		TreePrinter.printWhitespaces(firstSpaces);
+		BSTPrinter.printWhitespaces(firstSpaces);
 
-		List<TreeNode<T>> newNodes = new ArrayList<TreeNode<T>>();
-		for (TreeNode<T> node : nodes) {
+		List<BSTreeNode<T>> newNodes = new ArrayList<BSTreeNode<T>>();
+		for (BSTreeNode<T> node : nodes) {
 			if (node != null) {
 				System.out.print(node.val + (node.haveColor() ? (node.isRed() ? "△" : "▉") : ""));
 				newNodes.add(node.left);
@@ -167,31 +169,31 @@ public class TreePrinter {
 				newNodes.add(null);
 				System.out.print(" ");
 			}
-			TreePrinter.printWhitespaces(betweenSpaces);
+			BSTPrinter.printWhitespaces(betweenSpaces);
 		}
 		System.out.println("");
 
 		for (int i = 1; i <= edgeLines; i++) {
 			for (int j = 0; j < nodes.size(); j++) {
-				TreePrinter.printWhitespaces(firstSpaces - i);
+				BSTPrinter.printWhitespaces(firstSpaces - i);
 				if (nodes.get(j) == null) {
-					TreePrinter.printWhitespaces(edgeLines + edgeLines + i + 1);
+					BSTPrinter.printWhitespaces(edgeLines + edgeLines + i + 1);
 					continue;
 				}
 
 				if (nodes.get(j).left != null){
 					System.out.print("/");
 				}else{
-					TreePrinter.printWhitespaces(1);
+					BSTPrinter.printWhitespaces(1);
 				}
-				TreePrinter.printWhitespaces(i + i - 1);
+				BSTPrinter.printWhitespaces(i + i - 1);
 
 				if(nodes.get(j).right != null){
 					System.out.print("\\");
 				}else {
-					TreePrinter.printWhitespaces(1);
+					BSTPrinter.printWhitespaces(1);
 				}
-				TreePrinter.printWhitespaces(edgeLines + edgeLines - i);
+				BSTPrinter.printWhitespaces(edgeLines + edgeLines - i);
 			}
 			System.out.println("");
 		}
@@ -222,9 +224,9 @@ public class TreePrinter {
 	 * a(R b left) e(B g left) h(B g right)
 	 * f(R e right)
 	 */
-	public static <T extends Comparable<?>> void printRBDetails(TreeNode<T> root){
-		LinkedList<TreeNode<T>> queue =new LinkedList<TreeNode<T>>();
-		LinkedList<TreeNode<T>> queue2 =new LinkedList<TreeNode<T>>();
+	public static <T extends Comparable<?>> void printRBTreeDetails(BSTreeNode<T> root){
+		LinkedList<BSTreeNode<T>> queue =new LinkedList<BSTreeNode<T>>();
+		LinkedList<BSTreeNode<T>> queue2 =new LinkedList<BSTreeNode<T>>();
 		if(root == null){
 			return ;
 		}
@@ -232,8 +234,8 @@ public class TreePrinter {
 		boolean firstQueue = true;
 
 		while(!queue.isEmpty() || !queue2.isEmpty()){
-			LinkedList<TreeNode<T>> q = firstQueue ? queue : queue2;
-			TreeNode<T> n = q.poll();
+			LinkedList<BSTreeNode<T>> q = firstQueue ? queue : queue2;
+			BSTreeNode<T> n = q.poll();
 
 			if(n != null){
 				String pos = n.parent == null ? "" : ( n == n.parent.left

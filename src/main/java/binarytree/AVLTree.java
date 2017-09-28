@@ -1,9 +1,14 @@
-package common;
+package binarytree;
 
 
-public class AVLTree<E extends Comparable<E>> extends Tree<E>{
+import java.util.Arrays;
+import java.util.List;
 
-	public AVLTree(TreeNode<E> root) {
+import common.BSTreeNode;
+
+public class AVLTree<E extends Comparable<E>> extends BinaryTree<E> {
+
+	public AVLTree(BSTreeNode<E> root) {
 		super(root);
 	}
 	
@@ -21,16 +26,16 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 	 * @param e
 	 * @return
 	 */
-	private TreeNode<E> insertRecursion(TreeNode<E> root, E e){
+	private BSTreeNode<E> insertRecursion(BSTreeNode<E> root, E e){
 		if(root == null){
-			root = new TreeNode<E>(e);
+			root = new BSTreeNode<E>(e);
 		}else{
 			int compare = e.compareTo(root.val);
 			if(compare < 0){
-				TreeNode<E> node = insertRecursion(root.left, e);
+				BSTreeNode<E> node = insertRecursion(root.left, e);
 				node.parent = root;
 				root.left = node;
-				if(Tree.maxHeight(root.left) - Tree.maxHeight(root.right) == 2){
+				if(BinaryTree.maxHeight(root.left) - BinaryTree.maxHeight(root.right) == 2){
 					if(e.compareTo(root.left.val) < 0){
 						//LL型
 						root = leftLeftRotate(root);
@@ -40,10 +45,10 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 					}
 				}
 			}else if(compare > 0){
-				TreeNode<E> node = insertRecursion(root.right, e);
+				BSTreeNode<E> node = insertRecursion(root.right, e);
 				node.parent = root;
 				root.right = node;
-				if(Tree.maxHeight(root.right) - Tree.maxHeight(root.left) == 2){
+				if(BinaryTree.maxHeight(root.right) - BinaryTree.maxHeight(root.left) == 2){
 					if(e.compareTo(root.right.val) > 0){
 						//RR型
 						root = rightRightRotate(root);
@@ -67,7 +72,7 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 		root = deleteRecursion(root, e);
 	}
 
-	private TreeNode<E> deleteRecursion(TreeNode<E> root, E e){
+	private BSTreeNode<E> deleteRecursion(BSTreeNode<E> root, E e){
 		if(root == null) return null;
 
 		//递归找到要删除的元素
@@ -81,14 +86,14 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 			// 找到左子树最大值填充到当前位置，并删除左子树中的那个最大值
 			// （此过程不会变动节点指针，所以不必考虑节点的parent）
 			if(root.left != null){
-				TreeNode<E> l = root.left;
+				BSTreeNode<E> l = root.left;
 				while(l.right != null){
 					l = l.right;
 				}
 				root.val = l.val;
 				root.left = deleteRecursion(root.left, root.val);
 			}else if(root.right != null){	// 或者找到右子树最大值填充到当前位置，并删除右子树中的那个最大值
-				TreeNode<E> r = root.right;
+				BSTreeNode<E> r = root.right;
 				while(r.left != null){
 					r = r.left;
 				}
@@ -101,16 +106,16 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 
 		//平衡旋转
 		if(root != null){
-			if(Tree.maxHeight(root.left) - Tree.maxHeight(root.right) == 2){
-				if(Tree.maxHeight(root.left.left) - Tree.maxHeight(root.left.right) == 1){
+			if(BinaryTree.maxHeight(root.left) - BinaryTree.maxHeight(root.right) == 2){
+				if(BinaryTree.maxHeight(root.left.left) - BinaryTree.maxHeight(root.left.right) == 1){
 					//LL型
 					root = leftLeftRotate(root);
 				}else{
 					//LR型
 					root = leftRightRotate(root);
 				}
-			}else if(Tree.maxHeight(root.right) - Tree.maxHeight(root.left) == 2){
-				if(Tree.maxHeight(root.right.right) - Tree.maxHeight(root.right.left) == 1){
+			}else if(BinaryTree.maxHeight(root.right) - BinaryTree.maxHeight(root.left) == 2){
+				if(BinaryTree.maxHeight(root.right.right) - BinaryTree.maxHeight(root.right.left) == 1){
 					//RR型
 					root = rightRightRotate(root);
 				}else{
@@ -126,10 +131,10 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 	 * 查找元素
 	 * @param key
 	 */
-	public TreeNode<E> search(E key){
+	public BSTreeNode<E> search(E key){
 		if(root == null) return null;
 		
-		TreeNode<E> node = root;
+		BSTreeNode<E> node = root;
 		while(node != null){
 			int compare = key.compareTo(node.val);
 			if(compare < 0){
@@ -144,8 +149,8 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 	}
 
 	//LL型平衡旋转
-	private TreeNode<E> leftLeftRotate(TreeNode<E> root) {
-		TreeNode<E> l = root.left;		//new root is l.
+	private BSTreeNode<E> leftLeftRotate(BSTreeNode<E> root) {
+		BSTreeNode<E> l = root.left;		//new root is l.
 		l.parent = root.parent;
 		
 		root.left = l.right;
@@ -159,14 +164,14 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 	}
 
 	//LR型平衡旋转
-	private TreeNode<E> leftRightRotate(TreeNode<E> root) {
+	private BSTreeNode<E> leftRightRotate(BSTreeNode<E> root) {
 		root.left = rightRightRotate(root.left);
 		return leftLeftRotate(root);
 	}
 
 	//RR型平衡旋转
-	private TreeNode<E> rightRightRotate(TreeNode<E> root) {
-		TreeNode<E> r = root.right;		//new root is r.
+	private BSTreeNode<E> rightRightRotate(BSTreeNode<E> root) {
+		BSTreeNode<E> r = root.right;		//new root is r.
 		r.parent = root.parent;
 		
 		root.right = r.left;
@@ -180,8 +185,30 @@ public class AVLTree<E extends Comparable<E>> extends Tree<E>{
 	}
 
 	//RL型平衡旋转
-	private TreeNode<E> rightLeftRotate(TreeNode<E> root) {
+	private BSTreeNode<E> rightLeftRotate(BSTreeNode<E> root) {
 		root.right = leftLeftRotate(root.right);
 		return rightRightRotate(root);
+	}
+
+	public static void main(String[] args){
+//		List<Integer> nums = Arrays.asList(1,2,3,4,6,7,8,9,10,12,13,14,16,18,19,20,36);
+//		List<Integer> nums = Arrays.asList(1,2,3,4,5,6,7,8);
+		List<Integer> nums = Arrays.asList(6,2,9,4,5,7,3,8,1);
+
+		AVLTree<Integer> avlTree = new AVLTree<Integer>(null);
+		for(int i=0; i<nums.size(); i++) {
+			avlTree.insert(nums.get(i));
+		}
+		System.out.println(avlTree.printDFS());
+		System.out.println(avlTree.printBFS());
+		System.out.println(BinaryTree.maxHeight(avlTree.root));
+		System.out.println(BinaryTree.midTraverse(avlTree.root));
+		System.out.println(BinaryTree.preTraverse(avlTree.root));
+		System.out.println(BinaryTree.lastTraverse(avlTree.root));
+		BSTPrinter.printTree(avlTree.root);
+		BSTPrinter.printTree(avlTree.search(4));
+
+		avlTree.delete(4);
+		BSTPrinter.printRBTreeDetails(avlTree.root);
 	}
 }
