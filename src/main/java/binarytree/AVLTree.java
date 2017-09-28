@@ -6,6 +6,9 @@ import java.util.List;
 
 import common.BSTreeNode;
 
+/**
+ * 平衡二叉树实现
+ */
 public class AVLTree<E extends Comparable<E>> extends BinaryTree<E> {
 
 	public AVLTree(BSTreeNode<E> root) {

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ * 大数乘法算法
+ */
 public class BigNumberMultiply {
 
 	public static void main(String[] args) {

@@ -8,6 +8,9 @@ import java.util.List;
 
 import common.BSTreeNode;
 
+/**
+ * 二叉树打印输出类
+ */
 public class BSTPrinter {
 
 	/**

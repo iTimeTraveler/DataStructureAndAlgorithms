@@ -1,5 +1,8 @@
 package common;
 
+/**
+ * 二叉树节点
+ */
 public class BSTreeNode<T extends Comparable<?>> {
 	public T val;
 	private InnerColor color;

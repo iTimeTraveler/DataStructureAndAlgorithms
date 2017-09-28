@@ -10,7 +10,7 @@ import common.BSTreeNode;
 import common.CommonBuilder;
 
 /**
- * Binary Search Tree (BST) implement.
+ * 二叉树实现 Binary Search Tree (BST) implementation.
  */
 public class BinaryTree<E extends Comparable<?>>{
 	public BSTreeNode<E> root;

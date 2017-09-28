@@ -6,7 +6,7 @@ import java.util.List;
 import common.BSTreeNode;
 
 /**
- * RBTree红黑树的定义如下:
+ * 红黑树RBTree的定义如下:
  * 
  * 1. 任何一个节点都有颜色，黑色或者红色
  * 2. 根节点是黑色的

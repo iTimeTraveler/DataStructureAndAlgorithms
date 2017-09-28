@@ -4,15 +4,15 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
-import common.TreeNode;
+import common.MSTreeNode;
 
 /**
- * Multiway Search Tree (MST) implementation.
+ * 多叉树实现 Multiway Search Tree (MST) implementation.
  */
 public class MSTree<E> {
-	public TreeNode<E> root;
+	public MSTreeNode<E> root;
 
-	public MSTree(TreeNode<E> root){
+	public MSTree(MSTreeNode<E> root){
 		this.root = root;
 	}
 
@@ -23,10 +23,10 @@ public class MSTree<E> {
 		if(root == null) return null;
 		StringBuilder sb = new StringBuilder();
 
-		Stack<TreeNode<E>> stack = new Stack<TreeNode<E>>();
+		Stack<MSTreeNode<E>> stack = new Stack<MSTreeNode<E>>();
 		stack.push(root);
 		while(!stack.isEmpty()){
-			TreeNode<E> element = stack.pop();
+			MSTreeNode<E> element = stack.pop();
 			sb.append(element.val + ", ");
 
 			//子节点们需要倒序压栈
@@ -42,7 +42,7 @@ public class MSTree<E> {
 	/**
 	 * 深度优先搜索DFS（递归实现）
 	 */
-	public String depthFirstSearchRecursion(TreeNode<E> node){
+	public String depthFirstSearchRecursion(MSTreeNode<E> node){
 		if(node == null) return null;
 		StringBuilder sb = new StringBuilder();
 
@@ -61,10 +61,10 @@ public class MSTree<E> {
 		if(root == null) return null;
 		StringBuilder sb = new StringBuilder();
 
-		Queue<TreeNode<E>> queue = new LinkedList<TreeNode<E>>();
+		Queue<MSTreeNode<E>> queue = new LinkedList<MSTreeNode<E>>();
 		queue.offer(root);
 		while(!queue.isEmpty()){
-			TreeNode<E> e = queue.poll();
+			MSTreeNode<E> e = queue.poll();
 
 			sb.append(e.val + ", ");
 			for(int i = 0; e.children != null && i < e.children.size(); i++){
@@ -74,19 +74,33 @@ public class MSTree<E> {
 		return sb.toString();
 	}
 
+	/**
+	 * 节点遍历类型枚举
+	 */
+	static public enum TraversalType {
+		/**
+		 * 迭代
+		 */
+		LOOP,
+		/**
+		 * 递归
+		 */
+		RECURSIVE;
+	}
+
 
 	public static void main(String[] args){
-		TreeNode<Integer> root = new TreeNode<Integer>(0);
-		TreeNode<Integer> n101 = new TreeNode<Integer>(1);
-		TreeNode<Integer> n102 = new TreeNode<Integer>(2);
-		TreeNode<Integer> n103 = new TreeNode<Integer>(3);
-		TreeNode<Integer> n104 = new TreeNode<Integer>(4);
+		MSTreeNode<Integer> root = new MSTreeNode<Integer>(0);
+		MSTreeNode<Integer> n101 = new MSTreeNode<Integer>(1);
+		MSTreeNode<Integer> n102 = new MSTreeNode<Integer>(2);
+		MSTreeNode<Integer> n103 = new MSTreeNode<Integer>(3);
+		MSTreeNode<Integer> n104 = new MSTreeNode<Integer>(4);
 
-		TreeNode<Integer> n1021 = new TreeNode<Integer>(21);
-		TreeNode<Integer> n1022 = new TreeNode<Integer>(22);
-		TreeNode<Integer> n1023 = new TreeNode<Integer>(23);
+		MSTreeNode<Integer> n1021 = new MSTreeNode<Integer>(21);
+		MSTreeNode<Integer> n1022 = new MSTreeNode<Integer>(22);
+		MSTreeNode<Integer> n1023 = new MSTreeNode<Integer>(23);
 
-		TreeNode<Integer> n10231 = new TreeNode<Integer>(31);
+		MSTreeNode<Integer> n10231 = new MSTreeNode<Integer>(31);
 
 		MSTree<Integer> tree = new MSTree<Integer>(root);
 		n1023.appendChildNode(n10231);

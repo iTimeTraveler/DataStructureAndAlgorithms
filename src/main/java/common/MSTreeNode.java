@@ -3,18 +3,21 @@ package common;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TreeNode<T> {
+/**
+ * 多叉树节点
+ */
+public class MSTreeNode<T> {
 	public T val;
-	public TreeNode<T> parent;
-	public List<TreeNode<T>> children;
-	public TreeNode(T value){
+	public MSTreeNode<T> parent;
+	public List<MSTreeNode<T>> children;
+	public MSTreeNode(T value){
 		this.val = value;
 	}
 
 
-	public void appendChildNode(TreeNode<T> node){
+	public void appendChildNode(MSTreeNode<T> node){
 		if(children == null){
-			children = new ArrayList<TreeNode<T>>();
+			children = new ArrayList<MSTreeNode<T>>();
 		}
 		children.add(node);
 	}
@@ -23,11 +26,11 @@ public class TreeNode<T> {
 	@Override
 	public String toString() {
 		StringBuilder childStr = new StringBuilder("[");
-		for(TreeNode child : children){
+		for(MSTreeNode child : children){
 			childStr.append(child.val + " ");
 		}
 		childStr.append("]");
-		return "TreeNode{" +
+		return "MSTreeNode{" +
 				"value=" + val.toString() +
 				"children=" + childStr +
 				"parent=" + parent.val +

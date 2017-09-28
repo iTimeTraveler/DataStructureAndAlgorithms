@@ -1,5 +1,8 @@
 package common;
 
+/**
+ * 单链表节点
+ */
 public class ListNode<T> {
     public T val;
     public ListNode<T> next;

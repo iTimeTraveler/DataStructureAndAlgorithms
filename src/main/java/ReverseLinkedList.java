@@ -4,6 +4,9 @@ import java.util.List;
 import common.CommonBuilder;
 import common.ListNode;
 
+/**
+ * 反转单链表
+ */
 public class ReverseLinkedList {
 
 	public static void main(String[] args) {
