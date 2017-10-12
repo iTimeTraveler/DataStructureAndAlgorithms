@@ -9,6 +9,7 @@ public class BinarySearch {
 		System.out.println(binarySearch(array, 4));
 		System.out.println(binarySearchRecrusion(array, 4, 0, array.length - 1));
 		System.out.println(findFirstIndex(array, 4));
+		System.out.println(findLastIndex(array, 4));
 	}
 
 	/**
@@ -70,6 +71,30 @@ public class BinarySearch {
 				high = middle - 1;
 			}else if(target >= arr[middle]){
 				low = middle + 1;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 二分查找实现查找元素出现的最后一个位置
+	 */
+	public static int findLastIndex(int[] arr, int target){
+		if(arr == null || arr.length < 1) return -1;
+
+		int low = 0;
+		int high = arr.length;
+		int result = -1;
+		while(low <= high){
+			int middle = (low + high) >> 1;
+			if(target == arr[middle]){
+				result = middle;
+			}
+
+			if(target >= arr[middle]){
+				low = middle + 1;
+			}else if(target <= arr[middle]){
+				high = middle - 1;
 			}
 		}
 		return result;
