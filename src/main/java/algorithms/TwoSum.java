@@ -68,10 +68,10 @@ public class TwoSum {
 	}
 
 	public static void setBit(int bitArray[], int k){
-		bitArray[k / Byte.SIZE] |= (1 << (k % Byte.SIZE));
+		bitArray[k / Integer.SIZE] |= (1 << (k % Integer.SIZE));
 	}
 
 	public static int getBit(int bitArray[], int k){
-		return (bitArray[k / Byte.SIZE] & (1 << (k % Byte.SIZE)));
+		return (bitArray[k / Integer.SIZE] & (1 << (k % Integer.SIZE)));
 	}
 }
