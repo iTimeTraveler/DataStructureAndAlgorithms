@@ -28,12 +28,64 @@ public class CharacterSubset {
 		String a2 = "ABCDEFGHLMNOPQRS";
 		String b2 = "DCGSRQPOZ";
 
+		System.out.println("\na1 and b1: " + isSubsetByQuickSort(a1, b1));
+		System.out.println("\na2 and b2: " + isSubsetByQuickSort(a2, b2));
+		System.out.println("\na1 and b1: " + isSubsetByCounterSort(a1, b1));
+		System.out.println("\na2 and b2: " + isSubsetByCounterSort(a2, b2));
 		System.out.println("\na1 and b1: " + isSubsetByHashset(a1, b1));
 		System.out.println("\na2 and b2: " + isSubsetByHashset(a2, b2));
 		System.out.println("\na1 and b1: " + isSubsetByPrimeNumber(a1, b1));
 		System.out.println("\na2 and b2: " + isSubsetByPrimeNumber(a2, b2));
 		System.out.println("\na1 and b1: " + isSubsetByBitmap(a1, b1));
 		System.out.println("\na2 and b2: " + isSubsetByBitmap(a2, b2));
+	}
+
+	/**
+	 * 排序方案：快速排序
+	 */
+	public static boolean isSubsetByQuickSort(String a, String b){
+		char[] ca = a.toCharArray();
+		char[] cb = b.toCharArray();
+
+		quickSort(ca, 0, ca.length - 1);
+		quickSort(cb, 0, cb.length - 1);
+
+		//字符串String1的比较指针
+		int pos = 0;
+		for(char c : cb){
+			while(pos < ca.length-1 && ca[pos] < c){
+				pos++;
+			}
+			if(c != ca[pos]){
+				System.out.println("No exist char: " + c);
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * 排序方案：计数排序
+	 */
+	public static boolean isSubsetByCounterSort(String a, String b){
+		char[] ca = a.toCharArray();
+		char[] cb = b.toCharArray();
+
+		ca = counterSort(ca);
+		cb = counterSort(cb);
+
+		//字符串String1的比较指针
+		int pos = 0;
+		for(char c : cb){
+			while(pos < ca.length-1 && ca[pos] < c){
+				pos++;
+			}
+			if(c != ca[pos]){
+				System.out.println("No exist char: " + c);
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -96,6 +148,46 @@ public class CharacterSubset {
 			}
 		}
 		return true;
+	}
+
+	public static char[] counterSort(char[] arr){
+		int[] bucket = new int[LETTER_REGION];
+		for(char c : arr){
+			int index = c - 'A';
+			bucket[index]++;
+		}
+		for(int i = 1; i < LETTER_REGION; i++){
+			bucket[i] += bucket[i - 1];
+		}
+		char[] res = new char[arr.length];
+		for(char c : arr){
+			int index = c - 'A';
+			res[bucket[index] - 1] = c;
+			bucket[index]--;
+		}
+		return res;
+	}
+
+	public static void quickSort(char[] arr, int low, int high){
+		if(arr.length <= 0) return;
+		if(low >= high) return;
+
+		int l = low;
+		int r = high;
+		char pivot = arr[l];
+		while(l < r){
+			while(l < r && arr[r] >= pivot){
+				r--;
+			}
+			arr[l] = arr[r];
+			while(l < r && arr[l] <= pivot){
+				l++;
+			}
+			arr[r] = arr[l];
+		}
+		arr[l] = pivot;
+		quickSort(arr, low, l - 1);
+		quickSort(arr, l + 1, high);
 	}
 
 
