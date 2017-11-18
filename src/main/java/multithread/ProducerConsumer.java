@@ -10,6 +10,7 @@ import java.util.Random;
  */
 public class ProducerConsumer {
 	private static final int CAPACITY = 5;
+	private static int i = 0;
 
 	public static void main(String args[]){
 		Queue<Integer> queue = new LinkedList<Integer>();
@@ -34,8 +35,7 @@ public class ProducerConsumer {
 		private Queue<Integer> queue;
 		String name;
 		int maxSize;
-		int i = 0;
-		
+
 		public Producer(String name, Queue<Integer> queue, int maxSize){
 			super(name);
 			this.name = name;
@@ -58,12 +58,12 @@ public class ProducerConsumer {
 					System.out.println("[" + name + "] Producing value : +" + i);
 					queue.offer(i++);
 					queue.notifyAll();
+				}
 
-					try {
-						Thread.sleep(new Random().nextInt(1000));
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+				try {
+					Thread.sleep(new Random().nextInt(1000));
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 			
@@ -100,12 +100,12 @@ public class ProducerConsumer {
 					int x = queue.poll();
 					System.out.println("[" + name + "] Consuming value : " + x);
 					queue.notifyAll();
+				}
 
-					try {
-						Thread.sleep(new Random().nextInt(1000));
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+				try {
+					Thread.sleep(new Random().nextInt(1000));
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 		}

@@ -2,12 +2,14 @@ package multithread;
 
 import java.util.Random;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 生产者消费者模式：使用{@link java.util.concurrent.BlockingQueue}实现
  */
 public class ProducerConsumerByBQ{
 	private static final int CAPACITY = 5;
+	private static volatile AtomicInteger i = new AtomicInteger(0);
 
 	public static void main(String args[]){
 		LinkedBlockingDeque<Integer> blockingQueue = new LinkedBlockingDeque<Integer>(CAPACITY);
@@ -32,7 +34,6 @@ public class ProducerConsumerByBQ{
 		private LinkedBlockingDeque<Integer> blockingQueue;
 		String name;
 		int maxSize;
-		int i = 0;
 
 		public Producer(String name, LinkedBlockingDeque<Integer> queue, int maxSize){
 			super(name);
@@ -45,9 +46,9 @@ public class ProducerConsumerByBQ{
 		public void run(){
 			while(true){
 				try {
-					blockingQueue.put(i);
-					System.out.println("[" + name + "] Producing value : +" + i);
-					i++;
+					blockingQueue.put(i.get());
+					System.out.println("[" + name + "] Producing value : +" + i.get());
+					i.incrementAndGet();
 
 					//暂停最多1秒
 					Thread.sleep(new Random().nextInt(1000));

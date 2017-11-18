@@ -14,6 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ProducerConsumerByLock {
 	private static final int CAPACITY = 5;
+	private static int i = 0;
 	private static final Lock lock = new ReentrantLock();
 	private static final Condition fullCondition = lock.newCondition();		//队列满的条件
 	private static final Condition emptyCondition = lock.newCondition();		//队列空的条件
@@ -42,7 +43,6 @@ public class ProducerConsumerByLock {
 		private Queue<Integer> queue;
 		String name;
 		int maxSize;
-		int i = 0;
 
 		public Producer(String name, Queue<Integer> queue, int maxSize){
 			super(name);
