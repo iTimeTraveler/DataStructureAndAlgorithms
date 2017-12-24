@@ -1,4 +1,4 @@
-package common;
+package main.java.common;
 
 import java.util.Collections;
 import java.util.List;

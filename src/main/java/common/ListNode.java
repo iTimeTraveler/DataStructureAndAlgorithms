@@ -1,4 +1,6 @@
-package common;
+package main.java.common;
+
+import main.java.algorithms.LoopList;
 
 /**
  * 单链表节点
@@ -13,8 +15,12 @@ public class ListNode<T> {
     }
 
     //打印输出链表
-    public static void printAllNodes(ListNode head){
-        ListNode node = head;
+    public static <T> void printAllNodes(ListNode<T> head){
+    	if (LoopList.isLoopList(head)) {
+    		System.out.println("暂时不支持输出有环链表");
+    		return;
+    	}
+        ListNode<T> node = head;
         while (node != null){
             System.out.print(node.val);
             node = node.next;
