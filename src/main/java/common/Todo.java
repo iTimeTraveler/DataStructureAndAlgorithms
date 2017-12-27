@@ -1,4 +1,4 @@
-package main.java.common;
+package common;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Inherited
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@interface Todo {
+public @interface Todo {
 	public enum Priority {LOW, MEDIUM, HIGH}
 	public enum Status {STARTED, NOT_STARTED}
 	String author() default "iTimeTraveler";

@@ -1,6 +1,6 @@
-package main.java.algorithms;
+package algorithms;
 
-import main.java.common.ListNode;
+import common.ListNode;
 
 public class LoopList {
 	
@@ -14,16 +14,27 @@ public class LoopList {
 		ListNode<Integer> n5 = new ListNode<Integer>(5);
 		ListNode<Integer> n6 = new ListNode<Integer>(6);
 		
+//		n0.next = n1;
+//		n1.next = n2;
+//		n2.next = n3;
+//		n3.next = n4;
+//		n4.next = n5;
+//		n5.next = n6;
+//		n6.next = n0;
+//
+//		System.out.println(isLoopList(n0));
+//		System.out.println(findEntranceInLoopList(n0).val);
+
+
 		n0.next = n1;
 		n1.next = n2;
 		n2.next = n3;
-		n3.next = n4;
-		n4.next = n5;
-		n5.next = n6;
-		n6.next = n0;
-		
-		System.out.println(isLoopList(n0));
-		System.out.println(findEntranceInLoopList(n0).val);
+
+		n1.prev = n3;
+		n3.prev = n2;
+		n2.prev = n1;
+		System.out.println(isLoopTowWayList(n0));
+
 	}
 	
 	/**
@@ -50,7 +61,7 @@ public class LoopList {
 	
 	
 	/**
-	 * 找到有环链表的入口
+	 * 找到有环单链表的入口
 	 * @param head
 	 * @return
 	 */
@@ -85,6 +96,44 @@ public class LoopList {
 			}
 		}
 		return null;
+	}
+
+
+	/**
+	 * 双向链表是否存在环
+	 * @param head
+	 * @return
+	 */
+	public static <T> boolean isLoopTowWayList(ListNode<T> head){
+		ListNode<T> slow, fast;
+
+		//与单链表类似，使用快慢指针先单向遍历到结尾，如果相遇证明起码单向有环
+		slow = fast = head;
+		while(fast != null && fast.next != null){
+			slow = slow.next;
+			fast = fast.next.next;
+
+			if(slow == fast){
+				return true;
+			}
+		}
+
+		//找到尾指针
+		while(slow.next != null){
+			slow = slow.next;
+		}
+
+		//如果next单向没环，从尾节点回溯遍历，看prev是否存在环
+		fast = slow;
+		while(fast != null && fast.prev != null){
+			slow = slow.prev;
+			fast = fast.prev.prev;
+			if(slow == fast){
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

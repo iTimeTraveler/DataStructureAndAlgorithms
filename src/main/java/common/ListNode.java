@@ -1,12 +1,13 @@
-package main.java.common;
+package common;
 
-import main.java.algorithms.LoopList;
+import algorithms.LoopList;
 
 /**
  * 单链表节点
  */
 public class ListNode<T> {
     public T val;
+    public ListNode<T> prev;
     public ListNode<T> next;
     public ListNode(T x) { val = x; }
     public ListNode(T val, ListNode next) {
