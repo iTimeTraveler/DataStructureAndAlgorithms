@@ -336,7 +336,7 @@ public class RBTree<E extends Comparable<E>> extends BinaryTree<E> {
 						rotateToRight(brother);
 						brother = rightOf(parentOf(x));
 					}
-					// case 4：兄弟节点是黑色，但是兄弟节点的右子是红色，左子的颜色任意（调换brother和parent的颜色，并将brother->right涂黑, 再对parent进行一次左旋）
+					// case 4：兄弟节点是黑色，但是兄弟节点的右子是红色，左子的颜色任意（为了借用兄弟节点的黑色填充到被删黑节点所在的子树，调换brother和parent的颜色，并将brother->right涂黑, 再对parent进行一次左旋）
 					setColor(brother, colorOf(parentOf(x)));
 					setColor(parentOf(x), BLACK);
 					setColor(rightOf(brother), BLACK);
