@@ -128,6 +128,51 @@ public class BSTPrinter {
 	}
 
 
+	/**
+	 * Print a tree like this.
+	 *
+	 * │           ┌── 15
+	 * │       ┌── 7
+	 * │       │   └── 14
+	 * │   ┌── 3
+	 * │   │   │   ┌── 13
+	 * │   │   └── 6
+	 * │   │       └── 12
+	 * └── 1
+	 *     │       ┌── 11
+	 *     │   ┌── 5
+	 *     │   │   └── 10
+	 *     └── 2
+	 *         │       ┌── 19
+	 *         │   ┌── 9
+	 *         │   │   └── 18
+	 *         └── 4
+	 *             │   ┌── 17
+	 *             └── 8
+	 *                 └── 16
+	 */
+	public static <T extends Comparable<?>> void printDirectoryTree(BSTreeNode<T> node){
+		printDirectoryTree(node, "", true);
+	}
+
+	public static <T extends Comparable<?>> void printDirectoryTree(BSTreeNode<T> node, String prefix, boolean isLeft) {
+		if (node == null) {
+			System.out.println("Empty tree");
+			return;
+		}
+
+		if (node.right != null) {
+			printDirectoryTree(node.right, prefix + (isLeft ? "│   " : "    "), false);
+		}
+
+		System.out.println(prefix + (isLeft ? "└── " : "┌── ") + node.val);
+
+		if (node.left != null) {
+			printDirectoryTree(node.left, prefix + (isLeft ? "    " : "│   "), true);
+		}
+	}
+
+
 
 	/**
 	 * 树形打印输出

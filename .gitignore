@@ -3,3 +3,8 @@
 .settings/*
 .classpath
 .project
+.idea/*
+.gradle/*
+gradle/*
+gradle*
+local.properties
