@@ -3,7 +3,11 @@ package common;
 import algorithms.LoopList;
 
 /**
- * 单链表节点
+ * 链表节点
+ *
+ *      +------+  prev +-----+  prev +-----+
+ * head |      | <===> |     | <===> |     |  tail
+ *      +------+  next +-----+  next +-----+
  */
 public class ListNode<T> {
     public T val;

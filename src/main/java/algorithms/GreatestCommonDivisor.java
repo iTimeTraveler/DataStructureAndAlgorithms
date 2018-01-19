@@ -1,5 +1,8 @@
 package main.java.algorithms;
 
+/**
+ * 最大公约数
+ */
 public class GreatestCommonDivisor {
 	
 	public static void main(String args[]){

@@ -155,20 +155,20 @@ public class BSTPrinter {
 		printDirectoryTree(node, "", true);
 	}
 
-	public static <T extends Comparable<?>> void printDirectoryTree(BSTreeNode<T> node, String prefix, boolean isLeft) {
+	private static <T extends Comparable<?>> void printDirectoryTree(BSTreeNode<T> node, String prefix, boolean isLeft) {
 		if (node == null) {
 			System.out.println("Empty tree");
 			return;
 		}
 
 		if (node.right != null) {
-			printDirectoryTree(node.right, prefix + (isLeft ? "│   " : "    "), false);
+			printDirectoryTree(node.right, prefix + (isLeft ? "│   " : "     "), false);
 		}
 
 		System.out.println(prefix + (isLeft ? "└── " : "┌── ") + node.val);
 
 		if (node.left != null) {
-			printDirectoryTree(node.left, prefix + (isLeft ? "    " : "│   "), true);
+			printDirectoryTree(node.left, prefix + (isLeft ? "     " : "│   "), true);
 		}
 	}
 

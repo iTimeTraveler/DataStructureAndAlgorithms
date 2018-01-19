@@ -186,6 +186,7 @@ public class BinaryTree<E extends Comparable<?>>{
 		System.out.println(BinaryTree.midTraverse(tree.root));
 		System.out.println(BinaryTree.preTraverse(tree.root));
 		System.out.println(BinaryTree.lastTraverse(tree.root));
+		BSTPrinter.printDirectoryTree(tree.root);
 		BSTPrinter.printTree(tree.root);
 		tree.print();
 	}
