@@ -15,7 +15,7 @@ public class AtomicMutex {
 		for (int i = 0; i < THREAD_NUM; i++) {
 			Thread t = new Thread() {
 				public void run() {
-					for (int j = 0; j < 100; j++) {
+					for (int j = 0; j < 1000; j++) {
 						test.add();
 					}
 				}
@@ -39,7 +39,8 @@ public class AtomicMutex {
 	public static class TestMutex {
 		private int sum = 0;
 		private AtomicInteger atomicInteger = new AtomicInteger(0);
-		private SpinLock lock = new SpinLock();
+//		private SpinLock lock = new SpinLock();
+		private BlockLock lock = new BlockLock();
 
 		public void add() {
 //			if(!atomicInteger.compareAndSet(0, 1)){
@@ -47,14 +48,14 @@ public class AtomicMutex {
 //			}
 
 			lock.lock();
-			if (sum < 30000) {
+			if (sum < 3000) {
 				try {
 					// 这sleep一下，增加线程切换的概率里
 					Thread.sleep(1);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				sum += 50;
+				sum += 1;
 			}
 
 			lock.unlock();
